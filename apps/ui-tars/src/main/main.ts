@@ -18,7 +18,7 @@ import ElectronStore from 'electron-store';
 
 import * as env from '@main/env';
 import { logger } from '@main/logger';
-import { createMainWindow } from '@main/window/index';
+import { createMainWindow, hideMainWindow } from '@main/window/index';
 import { registerIpcMain } from '@ui-tars/electron-ipc/main';
 import { ipcRoutes } from './ipcRoutes';
 
@@ -30,6 +30,7 @@ import { registerSettingsHandlers } from './services/settings';
 import { sanitizeState } from './utils/sanitizeState';
 import { windowManager } from './services/windowManager';
 import { checkBrowserAvailability } from './services/browserCheck';
+import { startHttpApiServer, stopHttpApiServer } from './services/httpServer';
 
 const { isProd } = env;
 
@@ -228,7 +229,22 @@ app
 
     await initializeApp();
 
+    // start local http api server (port from env UI_TARS_API_PORT or random)
+    try {
+      await startHttpApiServer();
+    } catch (e) {
+      logger.error('[http api] failed to start', e);
+    }
+
+    await hideMainWindow();
+
     logger.info('app.whenReady end');
   })
 
   .catch(console.log);
+
+app.on('before-quit', async () => {
+  try {
+    await stopHttpApiServer();
+  } catch {}
+});

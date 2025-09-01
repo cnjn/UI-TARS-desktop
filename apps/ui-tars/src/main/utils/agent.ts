@@ -67,7 +67,7 @@ export const beforeAgentRun = async (operator: Operator) => {
     case Operator.RemoteBrowser:
       break;
     case Operator.LocalComputer:
-      showWidgetWindow();
+      // showWidgetWindow();
       showScreenWaterFlow();
       hideMainWindow();
       break;
@@ -87,10 +87,10 @@ export const afterAgentRun = (operator: Operator) => {
     case Operator.RemoteBrowser:
       break;
     case Operator.LocalComputer:
-      hideWidgetWindow();
+      // hideWidgetWindow();
       closeScreenMarker();
       hideScreenWaterFlow();
-      showMainWindow();
+      // showMainWindow();
       break;
     case Operator.LocalBrowser:
       hideWidgetWindow();

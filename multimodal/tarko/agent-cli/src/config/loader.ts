@@ -85,8 +85,10 @@ export function loadEnvironmentVars(workspace: string, isDebug = false) {
  */
 function isUrl(str: string): boolean {
   try {
-    new URL(str);
-    return true;
+    const url = new URL(str);
+    // Check if it's a valid URL with http/https/file protocol
+    // Windows paths like C:\path\to\file would be parsed as protocol "c:"
+    return ['http:', 'https:', 'ftp:', 'file:'].includes(url.protocol.toLowerCase());
   } catch {
     return false;
   }
