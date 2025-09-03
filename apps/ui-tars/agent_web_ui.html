@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI-TARS Agent 控制台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .control-panel {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .log-panel {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .suite-panel {
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .suite-list {
+            max-height: 220px;
+            overflow-y: auto;
+            border: 1px dashed #e1e5e9;
+            border-radius: 6px;
+            padding: 8px;
+            background: #fff;
+        }
+
+        .suite-item {
+            padding: 10px;
+            border-bottom: 1px solid #f1f3f5;
+        }
+
+        .suite-item:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-radius: 10px;
+            background: #e9f5ff;
+            color: #0077b6;
+            margin-left: 8px;
+        }
+
+        .runner-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(86, 171, 47, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-idle { background-color: #6c757d; }
+        .status-running { background-color: #28a745; animation: pulse 1.5s infinite; }
+        .status-error { background-color: #dc3545; }
+        .status-stopped { background-color: #ffc107; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .log-container {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            border-radius: 6px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid #4facfe;
+        }
+
+        .log-entry.error {
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: #dc3545;
+        }
+
+        .log-entry.success {
+            background: rgba(40, 167, 69, 0.1);
+            border-left-color: #28a745;
+        }
+
+        .screenshot-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .screenshot {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .screenshot-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 6px;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .prediction-item {
+            background: rgba(79, 172, 254, 0.1);
+            border-radius: 4px;
+            padding: 10px;
+            margin: 8px 0;
+            border-left: 3px solid #4facfe;
+        }
+
+        .prediction-thought {
+            font-weight: 600;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .prediction-action {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .connection-connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .connection-disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-status" id="connectionStatus">
+        <span class="status-indicator status-idle"></span>
+        未连接
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🤖 UI-TARS Agent 控制台</h1>
+            <p>设置指令、运行代理、监控日志和截图</p>
+        </div>
+
+        <div class="main-content">
+            <div class="control-panel">
+                <h3>🎛️ 控制面板</h3>
+                
+                <div class="form-group">
+                    <label for="apiUrl">API 地址</label>
+                    <input type="text" id="apiUrl" value="http://10.211.55.3:10086" placeholder="http://127.0.0.1:10086">
+                </div>
+
+                <div class="form-group">
+                    <label for="apiToken">API Token (可选)</label>
+                    <input type="password" id="apiToken" placeholder="Bearer token">
+                </div>
+
+                <div class="form-group">
+                    <label for="instructions">代理指令</label>
+                    <!-- <textarea id="instructions" placeholder="请输入代理要执行的指令...">下面是对yama程序的测试用例描述，请你逐个理解并执行相应的测试。最后给出测试总结 {
+            "suite_name": "终端交互与异常处理",
+            "suite_description": "测试终端窗口的交互性、对特殊输入和异常情况的处理能力。",
+            "test_cases": [
+              {
+                "case_id": "TM_INT_001",
+                "description": "在终端中输入包含特殊字符的命令（如`echo \"Hello & World!\"`），验证命令是否能正确解析并执行。",
+                "expected_result": "命令成功执行，特殊字符被正确处理，并返回预期结果。"
+              },
+              {
+                "case_id": "TM_INT_002",
+                "description": "输入一个非常长的命令（超过一行显示），验证终端是否能正确处理并执行。",
+                "expected_result": "长命令能被完整输入并执行，终端显示结果正常。"
+              },
+              {
+                "case_id": "TM_INT_004",
+                "description": "调整远程终端窗口的大小，验证内容显示和滚动条功能是否正常。",
+                "expected_result": "终端内容根据窗口大小自动调整，当内容超出显示范围时，滚动条出现并可正常使用。"
+              },
+              {
+                "case_id": "TM_INT_005",
+                "description": "从外部复制一段文本（如一个命令或一段脚本），尝试粘贴到远程终端中，验证是否能成功粘贴并执行。",
+                "expected_result": "文本能成功粘贴到终端输入行，并可正常执行。"
+              }
+            ]
+          }</textarea> -->
+          <textarea id="instructions" placeholder="请输入代理要执行的指令...">打开浏览器，搜索滑板鞋</textarea>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" id="clearBtn">清空</button>
+                    <button class="btn btn-success" id="setInstructionsBtn">设置指令</button>
+                    <button class="btn btn-primary" id="runBtn">运行代理</button>
+                    <button class="btn btn-warning" id="pauseBtn" disabled>暂停</button>
+                    <button class="btn btn-warning" id="resumeBtn" disabled>恢复</button>
+                    <button class="btn btn-danger" id="stopBtn" disabled>停止</button>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>状态: <span id="agentStatus">空闲</span></label>
+                </div>
+
+                <div class="suite-panel">
+                    <h3>🧪 测试套件</h3>
+                    <div class="form-group">
+                        <label for="outlineFile">上传测试用例 JSON</label>
+                        <input type="file" id="outlineFile" accept=".json">
+                    </div>
+                    <div class="button-group" style="margin-top: 8px;">
+                        <button class="btn btn-success" id="parseOutlineBtn">解析JSON</button>
+                    </div>
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label>已解析的套件列表 <span id="suiteCount" class="badge">0</span></label>
+                        <div id="suiteList" class="suite-list">
+                            <div class="suite-item" id="suiteListPlaceholder">尚未加载测试套件</div>
+                        </div>
+                    </div>
+                    <div class="runner-controls">
+                        <button class="btn btn-primary" id="startSequenceBtn" disabled>开始顺序执行</button>
+                        <button class="btn btn-warning" id="skipSuiteBtn" disabled>跳过当前</button>
+                        <button class="btn btn-danger" id="stopSequenceBtn" disabled>停止序列</button>
+                    </div>
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label>当前执行: <span id="currentSuiteLabel">-</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="log-panel">
+                <h3>📋 运行日志</h3>
+                <div class="log-container" id="logContainer">
+                    <div class="log-entry">
+                        <strong>系统:</strong> 等待连接...
+                    </div>
+                </div>
+
+                <div class="screenshot-container" id="screenshotContainer">
+                    <div class="screenshot-placeholder">
+                        暂无截图
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AgentController {
+            constructor() {
+                this.apiUrl = 'http://10.211.55.3:10086';
+                this.apiToken = '';
+                this.isRunning = false;
+                this.pollingInterval = null;
+                this.initializeElements();
+                this.bindEvents();
+                this.checkConnection();
+            }
+
+            initializeElements() {
+                this.elements = {
+                    apiUrl: document.getElementById('apiUrl'),
+                    apiToken: document.getElementById('apiToken'),
+                    instructions: document.getElementById('instructions'),
+                    outlineFile: document.getElementById('outlineFile'),
+                    parseOutlineBtn: document.getElementById('parseOutlineBtn'),
+                    suiteList: document.getElementById('suiteList'),
+                    suiteCount: document.getElementById('suiteCount'),
+                    startSequenceBtn: document.getElementById('startSequenceBtn'),
+                    skipSuiteBtn: document.getElementById('skipSuiteBtn'),
+                    stopSequenceBtn: document.getElementById('stopSequenceBtn'),
+                    currentSuiteLabel: document.getElementById('currentSuiteLabel'),
+                    clearBtn: document.getElementById('clearBtn'),
+                    setInstructionsBtn: document.getElementById('setInstructionsBtn'),
+                    runBtn: document.getElementById('runBtn'),
+                    pauseBtn: document.getElementById('pauseBtn'),
+                    resumeBtn: document.getElementById('resumeBtn'),
+                    stopBtn: document.getElementById('stopBtn'),
+                    agentStatus: document.getElementById('agentStatus'),
+                    logContainer: document.getElementById('logContainer'),
+                    screenshotContainer: document.getElementById('screenshotContainer'),
+                    connectionStatus: document.getElementById('connectionStatus')
+                };
+            }
+
+            bindEvents() {
+                this.elements.clearBtn.addEventListener('click', () => this.clearAgent());
+                this.elements.setInstructionsBtn.addEventListener('click', () => this.setInstructions());
+                this.elements.runBtn.addEventListener('click', () => this.runAgent());
+                this.elements.pauseBtn.addEventListener('click', () => this.pauseAgent());
+                this.elements.resumeBtn.addEventListener('click', () => this.resumeAgent());
+                this.elements.stopBtn.addEventListener('click', () => this.stopAgent());
+                this.elements.parseOutlineBtn.addEventListener('click', () => this.parseOutlineJson());
+                this.elements.startSequenceBtn.addEventListener('click', () => this.startSuiteSequence());
+                this.elements.stopSequenceBtn.addEventListener('click', () => this.stopSuiteSequence());
+                this.elements.skipSuiteBtn.addEventListener('click', () => this.skipCurrentSuite());
+                
+                this.elements.apiUrl.addEventListener('change', () => {
+                    this.apiUrl = this.elements.apiUrl.value;
+                    this.checkConnection();
+                });
+                
+                this.elements.apiToken.addEventListener('change', () => {
+                    this.apiToken = this.elements.apiToken.value;
+                });
+            }
+
+            // 解析上传的 outline JSON
+            async parseOutlineJson() {
+                try {
+                    const fileInput = this.elements.outlineFile;
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        this.addLog('系统', '请选择一个JSON文件', 'error');
+                        return;
+                    }
+                    const file = fileInput.files[0];
+                    const text = await file.text();
+                    const json = JSON.parse(text);
+                    const suites = this.extractSuites(json);
+                    if (!suites.length) {
+                        this.addLog('系统', '未发现可执行的测试套件', 'error');
+                        return;
+                    }
+                    this.suites = suites;
+                    this.renderSuiteList();
+                    this.elements.startSequenceBtn.disabled = false;
+                    this.addLog('系统', `解析完成，共 ${suites.length} 个测试套件`, 'success');
+                } catch (e) {
+                    this.addLog('系统', '解析JSON失败: ' + (e.message || e), 'error');
+                }
+            }
+
+            // 从 outline JSON 中抽取 test_suites 数组（兼容不同层级）
+            extractSuites(json) {
+                const suites = [];
+                try {
+                    const outlines = Array.isArray(json.outlines) ? json.outlines : [];
+                    for (const item of outlines) {
+                        const block = item.test_outline_for_function || item;
+                        const list = Array.isArray(block?.test_suites) ? block.test_suites : [];
+                        for (const suite of list) {
+                            if (suite && typeof suite.suite_name === 'string' && Array.isArray(suite.test_cases)) {
+                                suites.push({
+                                    suite_name: suite.suite_name,
+                                    suite_description: suite.suite_description || '',
+                                    test_cases: suite.test_cases,
+                                });
+                            }
+                        }
+                    }
+                } catch {}
+                return suites;
+            }
+
+            renderSuiteList() {
+                const list = this.elements.suiteList;
+                list.innerHTML = '';
+                this.elements.suiteCount.textContent = String(this.suites.length);
+                this.suites.forEach((s, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'suite-item';
+                    const caseCount = Array.isArray(s.test_cases) ? s.test_cases.length : 0;
+                    div.innerHTML = `<strong>${idx + 1}. ${s.suite_name}</strong> <span class="badge">${caseCount} 用例</span><div style="color:#666;margin-top:4px;">${(s.suite_description||'').replace(/</g,'&lt;')}</div>`;
+                    list.appendChild(div);
+                });
+                if (!this.suites.length) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'suite-item';
+                    placeholder.textContent = '尚未加载测试套件';
+                    list.appendChild(placeholder);
+                }
+            }
+
+            // 将单个 suite 转为 instructions 字符串
+            buildInstructionsFromSuite(suite) {
+                const payload = {
+                    suite_name: suite.suite_name,
+                    suite_description: suite.suite_description || '',
+                    test_cases: (suite.test_cases || []).map((c) => ({
+                        case_id: c.case_id,
+                        description: c.description,
+                        expected_result: c.expected_result,
+                    })),
+                };
+                return `下面是对yama程序的测试用例描述，请你逐个理解并执行相应的测试。最后给出测试总结 ${JSON.stringify(payload, null, 2)}`;
+            }
+
+            // 顺序执行控制
+            async startSuiteSequence() {
+                if (!Array.isArray(this.suites) || !this.suites.length) {
+                    this.addLog('系统', '没有可执行的测试套件', 'error');
+                    return;
+                }
+                if (this.sequenceRunning) {
+                    this.addLog('系统', '序列已在进行中', 'error');
+                    return;
+                }
+                this.sequenceRunning = true;
+                this.sequenceAbort = false;
+                this.sequenceIndex = 0;
+                this.elements.startSequenceBtn.disabled = true;
+                this.elements.stopSequenceBtn.disabled = false;
+                this.elements.skipSuiteBtn.disabled = false;
+                this.addLog('系统', '开始按序执行测试套件', 'success');
+
+                while (this.sequenceRunning && !this.sequenceAbort && this.sequenceIndex < this.suites.length) {
+                    const suite = this.suites[this.sequenceIndex];
+                    this.elements.currentSuiteLabel.textContent = `${this.sequenceIndex + 1}/${this.suites.length} - ${suite.suite_name}`;
+                    try {
+                        await this.executeSingleSuite(suite);
+                    } catch (e) {
+                        this.addLog('系统', `执行套件失败: ${e.message || e}`, 'error');
+                    }
+                    if (this.sequenceAbort) break;
+                    this.sequenceIndex += 1;
+                }
+
+                this.addLog('系统', '序列执行结束', 'success');
+                this.elements.currentSuiteLabel.textContent = '-';
+                this.elements.startSequenceBtn.disabled = false;
+                this.elements.stopSequenceBtn.disabled = true;
+                this.elements.skipSuiteBtn.disabled = true;
+                this.sequenceRunning = false;
+            }
+
+            stopSuiteSequence() {
+                this.sequenceAbort = true;
+                this.addLog('系统', '已请求停止序列', 'error');
+                try { this.stopAgent(); } catch {}
+            }
+
+            skipCurrentSuite() {
+                this.addLog('系统', '跳过当前套件', 'warning');
+                this.sequenceSkip = true;
+                try { this.stopAgent(); } catch {}
+            }
+
+            // 执行单个 suite：设置指令 -> 运行 -> 轮询直到结束
+            async executeSingleSuite(suite) {
+                if (this.sequenceAbort) return;
+                if (this.sequenceSkip) { this.sequenceSkip = false; return; }
+
+                const instructions = this.buildInstructionsFromSuite(suite);
+                await this.makeRequest('POST', '/agent/clear');
+                await this.makeRequest('POST', '/agent/instructions', { instructions });
+                this.addLog('系统', `已下发套件: ${suite.suite_name}`, 'success');
+                await this.makeRequest('POST', '/agent/run');
+
+                // 临时轮询：等待到终态再返回（不干扰全局UI轮询）
+                await this.waitUntilFinalState();
+            }
+
+            async waitUntilFinalState(timeoutMs = 30 * 60 * 1000) { // 最长等待30分钟
+                const start = Date.now();
+                let lastCount = 0;
+                while (true) {
+                    if (this.sequenceAbort || this.sequenceSkip) return;
+                    const state = await this.getStates();
+                    if (state) {
+                        const status = String(state.status || '').toLowerCase();
+                        const thinking = !!state.thinking;
+                        // const msgs = Array.isArray(state.messages) ? state.messages : [];
+                        // if (msgs.length !== lastCount) {
+                        //     lastCount = msgs.length;
+                        //     // 简要输出进度
+                        //     const lastMsg = msgs[msgs.length - 1];
+                        //     if (lastMsg && lastMsg.from === 'human'){
+                        //         this.addLog('用户', "Action applied" || '');
+                        //     }else if (lastMsg && lastMsg.from === 'gpt'){
+                        //         this.addLog('GPT', lastMsg.value || '');
+                        //     }
+                            
+                        // }
+
+                        this.updateAgentStatus(state);
+                        this.updateLogs(state);
+                        this.updateScreenshot(state);
+
+                        
+                        if (!thinking && (status === 'end' || status === 'error' || status === 'user_stopped')) {
+                            return;
+                        }
+                    }
+                    if (Date.now() - start > timeoutMs) {
+                        this.addLog('系统', '等待超时，自动继续下一个套件', 'error');
+                        return;
+                    }
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+            }
+
+            async checkConnection() {
+                try {
+                    const response = await this.makeRequest('GET', '/healthz');
+                    this.updateConnectionStatus(true);
+                    this.addLog('系统', '连接成功', 'success');
+                } catch (error) {
+                    this.updateConnectionStatus(false);
+                    this.addLog('系统', '连接失败: ' + error.message, 'error');
+                }
+            }
+
+            updateConnectionStatus(connected) {
+                const status = this.elements.connectionStatus;
+                const indicator = status.querySelector('.status-indicator');
+                
+                if (connected) {
+                    status.className = 'connection-status connection-connected';
+                    status.innerHTML = '<span class="status-indicator status-running"></span>已连接';
+                } else {
+                    status.className = 'connection-status connection-disconnected';
+                    status.innerHTML = '<span class="status-indicator status-idle"></span>未连接';
+                }
+            }
+
+            async makeRequest(method, path, data = null) {
+                const url = this.apiUrl + path;
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+
+                if (this.apiToken) {
+                    options.headers['Authorization'] = `Bearer ${this.apiToken}`;
+                }
+
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(url, options);
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+
+                return await response.json();
+            }
+
+            async clearAgent() {
+                try {
+                    await this.makeRequest('POST', '/agent/clear');
+                    this.addLog('系统', '代理已清空', 'success');
+                    this.updateStatus('空闲');
+                    this.clearLogs();
+                } catch (error) {
+                    this.addLog('系统', '清空失败: ' + error.message, 'error');
+                }
+            }
+
+            async setInstructions() {
+                const instructions = this.elements.instructions.value.trim();
+                if (!instructions) {
+                    this.addLog('系统', '请输入指令', 'error');
+                    return;
+                }
+
+                try {
+                    await this.makeRequest('POST', '/agent/instructions', { instructions });
+                    this.addLog('系统', '指令设置成功', 'success');
+                } catch (error) {
+                    this.addLog('系统', '设置指令失败: ' + error.message, 'error');
+                }
+            }
+
+            async runAgent() {
+                try {
+                    await this.makeRequest('POST', '/agent/run');
+                    this.addLog('系统', '代理开始运行', 'success');
+                    this.updateStatus('运行中');
+                    this.startPolling();
+                } catch (error) {
+                    this.addLog('系统', '启动失败: ' + error.message, 'error');
+                }
+            }
+
+            async pauseAgent() {
+                try {
+                    await this.makeRequest('POST', '/agent/pause');
+                    this.addLog('系统', '代理已暂停', 'success');
+                    this.updateStatus('已暂停');
+                } catch (error) {
+                    this.addLog('系统', '暂停失败: ' + error.message, 'error');
+                }
+            }
+
+            async resumeAgent() {
+                try {
+                    await this.makeRequest('POST', '/agent/resume');
+                    this.addLog('系统', '代理已恢复', 'success');
+                    this.updateStatus('运行中');
+                } catch (error) {
+                    this.addLog('系统', '恢复失败: ' + error.message, 'error');
+                }
+            }
+
+            async stopAgent() {
+                try {
+                    await this.makeRequest('POST', '/agent/stop');
+                    this.addLog('系统', '代理已停止', 'success');
+                    this.updateStatus('已停止');
+                    this.stopPolling();
+                } catch (error) {
+                    this.addLog('系统', '停止失败: ' + error.message, 'error');
+                }
+            }
+
+            async getStates() {
+                try {
+                    const response = await this.makeRequest('GET', '/state');
+                    return response.data;
+                } catch (error) {
+                    this.addLog('系统', '获取状态失败: ' + error.message, 'error');
+                    return null;
+                }
+            }
+
+            startPolling() {
+                this.isRunning = true;
+                this.pollingInterval = setInterval(async () => {
+                    const state = await this.getStates();
+                    if (state) {
+                        this.updateAgentStatus(state);
+                        this.updateLogs(state);
+                        this.updateScreenshot(state);
+                    }
+                }, 1000);
+            }
+
+            stopPolling() {
+                this.isRunning = false;
+                if (this.pollingInterval) {
+                    clearInterval(this.pollingInterval);
+                    this.pollingInterval = null;
+                }
+            }
+
+            updateAgentStatus(state) {
+                const status = state.status;
+                const thinking = state.thinking;
+                
+                let statusText = '空闲';
+                if (thinking) {
+                    statusText = '运行中';
+                } else if (status === 'end') {
+                    statusText = '已完成';
+                    this.stopPolling();
+                } else if (status === 'error') {
+                    statusText = '错误';
+                    this.stopPolling();
+                } else if (status === 'user_stopped') {
+                    statusText = '已停止';
+                    this.stopPolling();
+                }
+
+                this.updateStatus(statusText);
+            }
+
+            updateLogs(state) {
+                const messages = state.messages || [];
+                const newMessages = messages.slice(this.lastMessageCount || 0);
+                
+                newMessages.forEach(message => {
+                    if (message.from === 'gpt') {
+                        this.addLog('GPT', message.value || '');
+                        
+                        // 显示预测信息
+                        const predictions = message.predictionParsed || [];
+                        // predictions.forEach(prediction => {
+                        //     const predictionDiv = document.createElement('div');
+                        //     predictionDiv.className = 'prediction-item';
+                        //     predictionDiv.innerHTML = `
+                        //         <div class="prediction-thought">💭 ${prediction.thought || ''}</div>
+                        //         <div class="prediction-action">🎯 ${prediction.action_type}: ${prediction.action_inputs || ''}</div>
+                        //     `;
+                        //     this.elements.logContainer.appendChild(predictionDiv);
+                        // });
+                    } else if (message.from === 'human') {
+                        this.addLog('用户', "Action applied" || '');
+                    }
+                });
+                
+                this.lastMessageCount = messages.length;
+                this.scrollToBottom();
+            }
+
+            updateScreenshot(state) {
+                const messages = state.messages || [];
+                const lastMessage = messages[messages.length - 1];
+                
+                if (lastMessage){
+                    if (lastMessage.screenshotBase64WithElementMarker){
+                        const img = document.createElement('img');
+                        img.src = 'data:image/png;base64,' + lastMessage.screenshotBase64WithElementMarker;
+                        img.className = 'screenshot';
+                        img.alt = '当前截图';
+                        
+                        this.elements.screenshotContainer.innerHTML = '';
+                        this.elements.screenshotContainer.appendChild(img);
+                    }else if (lastMessage.screenshotBase64){
+                        const img = document.createElement('img');
+                        img.src = 'data:image/png;base64,' + lastMessage.screenshotBase64;
+                        img.className = 'screenshot';
+                        img.alt = '当前截图';
+                        
+                        this.elements.screenshotContainer.innerHTML = '';
+                        this.elements.screenshotContainer.appendChild(img);
+                    }
+                }
+
+                // if (lastMessage && lastMessage.screenshotBase64WithElementMarker) {
+                //     const img = document.createElement('img');
+                //     img.src = 'data:image/png;base64,' + lastMessage.screenshotBase64WithElementMarker;
+                //     img.className = 'screenshot';
+                //     img.alt = '当前截图';
+                    
+                //     this.elements.screenshotContainer.innerHTML = '';
+                //     this.elements.screenshotContainer.appendChild(img);
+                // }
+            }
+
+            updateStatus(status) {
+                this.elements.agentStatus.textContent = status;
+                
+                // 更新按钮状态
+                const isRunning = status === '运行中';
+                const isPaused = status === '已暂停';
+                
+                this.elements.runBtn.disabled = isRunning || isPaused;
+                this.elements.pauseBtn.disabled = !isRunning;
+                this.elements.resumeBtn.disabled = !isPaused;
+                this.elements.stopBtn.disabled = !isRunning && !isPaused;
+            }
+
+            addLog(source, message, type = '') {
+                const logEntry = document.createElement('div');
+                logEntry.className = `log-entry ${type}`;
+                
+                const timestamp = new Date().toLocaleTimeString();
+                logEntry.innerHTML = `
+                    <strong></strong> ${message}
+                    <span style="float: right; opacity: 0.7; font-size: 11px;">${timestamp}</span>
+                `;
+                
+                this.elements.logContainer.appendChild(logEntry);
+                this.scrollToBottom();
+            }
+
+            clearLogs() {
+                this.elements.logContainer.innerHTML = '';
+                this.lastMessageCount = 0;
+            }
+
+            scrollToBottom() {
+                this.elements.logContainer.scrollTop = this.elements.logContainer.scrollHeight;
+            }
+        }
+
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            new AgentController();
+        });
+    </script>
+</body>
+</html>

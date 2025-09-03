@@ -11,7 +11,11 @@ import { sanitizeState } from '@main/utils/sanitizeState';
 import { runAgent } from '@main/services/runAgent';
 import { GUIAgent } from '@ui-tars/sdk';
 import { GUIAgentManager } from '@main/ipcRoutes/agent';
-import { StatusEnum, type Conversation, type Message } from '@ui-tars/shared/types';
+import {
+  StatusEnum,
+  type Conversation,
+  type Message,
+} from '@ui-tars/shared/types';
 
 let server: http.Server | null = null;
 let boundPort: number | null = null;
@@ -30,7 +34,9 @@ const writeJson = (
   res.end(JSON.stringify(body));
 };
 
-const readJson = async <T = any>(req: http.IncomingMessage): Promise<T | null> => {
+const readJson = async <T = any>(
+  req: http.IncomingMessage,
+): Promise<T | null> => {
   return new Promise((resolve) => {
     const chunks: Buffer[] = [];
     req.on('data', (c) => chunks.push(Buffer.from(c)));
@@ -179,8 +185,7 @@ export const startHttpApiServer = async (
       }
 
       if (req.method === 'POST' && pathname === '/agent/messages') {
-        const body =
-          (await readJson<{ messages?: Conversation[] }>(req)) || {};
+        const body = (await readJson<{ messages?: Conversation[] }>(req)) || {};
         if (!Array.isArray(body.messages)) {
           writeJson(res, 400, { ok: false, error: 'invalid_messages' });
           return;
@@ -248,5 +253,3 @@ export const stopHttpApiServer = async () => {
   boundPort = null;
   logger.info('[httpServer] stopped');
 };
-
-

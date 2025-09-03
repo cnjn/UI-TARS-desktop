@@ -1,0 +1,252 @@
+{
+  "outlines": [
+    {
+      "test_outline_for_function": {
+        "function_name": "终端管理",
+        "image_url": "./images/Console.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "终端功能入口与界面验证",
+            "suite_description": "验证用户如何从主界面进入终端管理功能，并检查终端窗口的初始显示和基本交互。",
+            "test_cases": [
+              {
+                "case_id": "TM_UI_001",
+                "description": "从主界面选中一个受控主机，然后点击“终端管理”图标，验证远程终端窗口是否成功打开。",
+                "expected_result": "远程终端窗口成功打开，显示连接到所选主机的命令行界面。"
+              },
+              {
+                "case_id": "TM_UI_002",
+                "description": "验证打开的终端窗口标题是否包含目标主机信息（如IP地址），以及初始提示符是否正确显示。",
+                "expected_result": "终端窗口标题显示目标主机IP或名称，窗口内显示目标系统的命令行提示符（如C:\\Users\\...或$）。"
+              },
+              {
+                "case_id": "TM_UI_003",
+                "description": "在终端窗口中输入并执行一个简单的命令（如`exit`或`quit`），验证终端窗口是否能正常关闭。",
+                "expected_result": "终端窗口在执行关闭命令后正常关闭，返回主界面。"
+              }
+            ]
+          },
+          {
+            "suite_name": "远程命令执行功能",
+            "suite_description": "测试终端管理功能执行各种远程命令的能力，包括基本命令、带参数命令、多行输出命令和无效命令。",
+            "test_cases": [
+              {
+                "case_id": "TM_CMD_001",
+                "description": "在远程终端中执行一个简单的系统命令（如Windows的`dir`或Linux的`ls`），验证命令是否成功执行并返回正确结果。",
+                "expected_result": "命令成功执行，终端显示目标系统当前目录的文件和文件夹列表。"
+              },
+              {
+                "case_id": "TM_CMD_002",
+                "description": "执行一个带参数的系统命令（如Windows的`ipconfig /all`或Linux的`ifconfig -a`），验证命令是否成功执行并返回详细信息。",
+                "expected_result": "命令成功执行，终端显示目标系统的详细网络配置信息。"
+              },
+              {
+                "case_id": "TM_CMD_003",
+                "description": "执行一个产生多行输出的命令（如Windows的`tree`或Linux的`ps -ef`），验证所有输出内容是否完整显示。",
+                "expected_result": "命令成功执行，终端完整显示所有多行输出内容，且可正常滚动查看。"
+              },
+              {
+                "case_id": "TM_CMD_004",
+                "description": "执行一个改变当前目录的命令（如`cd C:\\`或`cd /tmp`），验证目录是否成功切换，并再次执行`dir`/`ls`确认。",
+                "expected_result": "目录成功切换，后续命令在新的目录下执行，且提示符更新为新目录。"
+              },
+              {
+                "case_id": "TM_CMD_005",
+                "description": "执行一个无效或不存在的命令，验证终端是否返回错误信息。",
+                "expected_result": "终端显示“命令不存在”或“不是内部或外部命令”等错误信息。"
+              },
+              {
+                "case_id": "TM_CMD_006",
+                "description": "尝试执行一个需要特定管理员权限但当前用户可能没有的命令（如Windows的`net user admin password`或Linux的`sudo reboot`），验证终端是否返回权限拒绝错误。",
+                "expected_result": "终端显示“拒绝访问”或“权限不足”等错误信息，命令未成功执行。"
+              }
+            ]
+          },
+          {
+            "suite_name": "终端交互与异常处理",
+            "suite_description": "测试终端窗口的交互性、对特殊输入和异常情况的处理能力。",
+            "test_cases": [
+              {
+                "case_id": "TM_INT_001",
+                "description": "在终端中输入包含特殊字符的命令（如`echo \"Hello & World!\"`），验证命令是否能正确解析并执行。",
+                "expected_result": "命令成功执行，特殊字符被正确处理，并返回预期结果。"
+              },
+              {
+                "case_id": "TM_INT_002",
+                "description": "输入一个非常长的命令（超过一行显示），验证终端是否能正确处理并执行。",
+                "expected_result": "长命令能被完整输入并执行，终端显示结果正常。"
+              },
+              {
+                "case_id": "TM_INT_003",
+                "description": "在远程终端连接期间，模拟目标系统断开连接或无响应，验证终端窗口的提示和行为。",
+                "expected_result": "终端窗口显示连接断开或无响应的提示信息，并禁止进一步输入命令。"
+              },
+              {
+                "case_id": "TM_INT_004",
+                "description": "调整远程终端窗口的大小，验证内容显示和滚动条功能是否正常。",
+                "expected_result": "终端内容根据窗口大小自动调整，当内容超出显示范围时，滚动条出现并可正常使用。"
+              },
+              {
+                "case_id": "TM_INT_005",
+                "description": "从外部复制一段文本（如一个命令或一段脚本），尝试粘贴到远程终端中，验证是否能成功粘贴并执行。",
+                "expected_result": "文本能成功粘贴到终端输入行，并可正常执行。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "进程管理",
+        "image_url": "./images/Process.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "界面显示与数据准确性",
+            "suite_description": "验证进程管理界面的加载、显示、数据完整性及准确性。",
+            "test_cases": [
+              {
+                "case_id": "PM_UI_001",
+                "description": "从主界面选择一个受控主机（如192.168.0.92），点击工具栏上的“进程管理”图标，验证进程管理界面是否正确加载。",
+                "expected_result": "进程管理界面成功加载，标题显示所选主机IP和“进程管理”，并展示该主机上的进程列表。"
+              },
+              {
+                "case_id": "PM_UI_002",
+                "description": "验证进程列表的列名是否正确显示：映像名称、PID、程序个数/路径。",
+                "expected_result": "界面显示“映像名称”、“PID”、“程序个数/路径”三列，且顺序正确。"
+              },
+              {
+                "case_id": "PM_UI_003",
+                "description": "验证进程列表中常见系统进程（如svchost.exe）的信息是否准确显示，包括映像名称、PID和完整路径。",
+                "expected_result": "svchost.exe等系统进程的映像名称、PID和路径信息与实际系统状态一致。"
+              },
+              {
+                "case_id": "PM_UI_004",
+                "description": "验证进程列表是否显示正确的进程总数。",
+                "expected_result": "界面顶部或底部显示当前受控主机上运行的进程总数，且与实际数量相符。"
+              },
+              {
+                "case_id": "PM_UI_005",
+                "description": "验证当进程数量超出当前显示区域时，滚动条是否出现并能正常滚动。",
+                "expected_result": "当进程列表过长时，垂直滚动条出现，用户可以通过滚动条查看所有进程。"
+              },
+              {
+                "case_id": "PM_UI_006",
+                "description": "验证CPU占用和内存使用等关键信息是否正确显示。",
+                "expected_result": "进程列表中包含CPU占用和内存使用等列，并显示准确的实时数据。"
+              },
+              {
+                "case_id": "PM_UI_007",
+                "description": "验证进程列表是否能实时或周期性刷新，以反映进程状态的变化（如CPU/内存使用率、新启动/停止的进程）。",
+                "expected_result": "进程列表能够自动刷新或提供手动刷新功能，确保显示最新的进程信息和资源使用情况。"
+              }
+            ]
+          },
+          {
+            "suite_name": "进程操作 - 启动",
+            "suite_description": "验证用户在受控机器上启动新进程的功能。",
+            "test_cases": [
+              {
+                "case_id": "PM_START_001",
+                "description": "尝试启动一个常见的应用程序（如记事本notepad.exe）。",
+                "expected_result": "记事本程序在受控主机上成功启动，并在进程列表中显示其信息。"
+              },
+              {
+                "case_id": "PM_START_002",
+                "description": "尝试启动一个带命令行参数的程序（例如：cmd.exe /c echo Hello）。",
+                "expected_result": "程序在受控主机上成功启动，并按照指定参数运行。"
+              },
+              {
+                "case_id": "PM_START_003",
+                "description": "尝试启动一个不存在的程序路径或名称。",
+                "expected_result": "系统提示启动失败，并给出相应的错误信息（如“文件未找到”）。"
+              },
+              {
+                "case_id": "PM_START_004",
+                "description": "通过主界面的“服务程序”功能（若与远程启动进程相关）启动一个指定程序。",
+                "expected_result": "指定的服务程序在受控主机上成功启动，并在进程列表中显示。"
+              }
+            ]
+          },
+          {
+            "suite_name": "进程操作 - 停止",
+            "suite_description": "验证用户在受控机器上停止运行中进程的功能。",
+            "test_cases": [
+              {
+                "case_id": "PM_STOP_001",
+                "description": "选择一个用户启动的进程（如记事本），执行停止操作。",
+                "expected_result": "选定的进程在受控主机上成功停止，并从进程列表中移除。"
+              },
+              {
+                "case_id": "PM_STOP_002",
+                "description": "尝试停止一个关键系统进程（如svchost.exe），验证系统响应。",
+                "expected_result": "系统提示操作失败，或提示权限不足，进程未被停止。"
+              },
+              {
+                "case_id": "PM_STOP_003",
+                "description": "尝试停止一个已不存在的进程（通过PID或名称）。",
+                "expected_result": "系统提示进程不存在或操作失败。"
+              },
+              {
+                "case_id": "PM_STOP_004",
+                "description": "选择多个用户启动的进程，执行批量停止操作。",
+                "expected_result": "所有选定的进程在受控主机上成功停止，并从进程列表中移除。"
+              }
+            ]
+          },
+          {
+            "suite_name": "进程操作 - 重启",
+            "suite_description": "验证用户在受控机器上重启运行中进程的功能。",
+            "test_cases": [
+              {
+                "case_id": "PM_RESTART_001",
+                "description": "选择一个用户启动的进程，执行重启操作。",
+                "expected_result": "选定的进程在受控主机上先停止后重新启动，并在进程列表中更新其PID等信息。"
+              },
+              {
+                "case_id": "PM_RESTART_002",
+                "description": "尝试重启一个关键系统进程，验证系统响应。",
+                "expected_result": "系统提示操作失败，或提示权限不足，进程未被重启。"
+              },
+              {
+                "case_id": "PM_RESTART_003",
+                "description": "尝试重启一个已不存在的进程。",
+                "expected_result": "系统提示进程不存在或操作失败。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常处理与性能",
+            "suite_description": "验证功能在异常情况下的处理能力以及在高负载下的性能表现。",
+            "test_cases": [
+              {
+                "case_id": "PM_ERROR_001",
+                "description": "在受控主机断开连接后，尝试进行进程管理操作（启动/停止/重启）。",
+                "expected_result": "系统提示受控主机已离线或连接失败，操作无法执行。"
+              },
+              {
+                "case_id": "PM_ERROR_002",
+                "description": "在受控主机上模拟大量进程运行（例如100+），验证进程管理界面加载和操作的响应速度。",
+                "expected_result": "即使在大量进程下，界面加载和操作响应依然保持在可接受的范围内，无明显卡顿。"
+              },
+              {
+                "case_id": "PM_ERROR_003",
+                "description": "验证长时间监控进程列表，界面和功能是否保持稳定，无内存泄漏或崩溃。",
+                "expected_result": "长时间运行后，进程管理功能依然稳定，无崩溃、内存泄漏或其他异常。"
+              },
+              {
+                "case_id": "PM_ERROR_004",
+                "description": "尝试对需要管理员权限才能操作的进程执行停止/重启操作，但当前用户权限不足。",
+                "expected_result": "系统提示权限不足，操作失败。"
+              }
+            ]
+          }
+        ]
+      }
+    }    
+  ]
+}

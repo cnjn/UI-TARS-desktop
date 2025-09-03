@@ -1,0 +1,48 @@
+下面是对yama程序的测试用例描述，请你逐个理解并执行相应的测试。最后给出测试总结 {
+    "suite_name": "终端功能入口与界面验证",
+    "suite_description": "验证用户如何从主界面进入终端管理功能，并检查终端窗口的初始显示和基本交互。",
+    "test_cases": [
+        {
+        "case_id": "TM_UI_001",
+        "description": "从主界面选中一个受控主机，然后点击“终端管理”图标，验证远程终端窗口是否成功打开。",
+        "expected_result": "远程终端窗口成功打开，显示连接到所选主机的命令行界面。"
+        },
+        {
+        "case_id": "TM_UI_002",
+        "description": "验证打开的终端窗口标题是否包含目标主机信息（如IP地址），以及初始提示符是否正确显示。",
+        "expected_result": "终端窗口标题显示目标主机IP或名称，窗口内显示目标系统的命令行提示符（如C:\\Users\\...或$）。"
+        },
+        {
+        "case_id": "TM_UI_003",
+        "description": "在终端窗口中输入并执行一个简单的命令（如`exit`或`quit`），验证终端窗口是否能正常关闭。",
+        "expected_result": "终端窗口在执行关闭命令后正常关闭，返回主界面。"
+        }
+    ]
+}
+
+PS C:\Users\cnjn\Desktop\UI-TARS-desktop\apps\ui-tars> python .\agent.py
+
+Thought: 现在需要开始测试yama程序的终端功能入口。首先看测试用例TM_UI_001，需要从主界面选中受控主机，然后点击“终端管理”图标。当前yama程序的界面里，有一个受控主机（127.0.0.1），所以第一步应该选中这个主机，然后找到终端 管理的图标点击。先确认yama窗口的受控主机列表，选中127.0.0.1这一行，然后 点击上方的“终端管理”按钮（界面上的“终端管理”图标）。
+Action: click(point='<point>450 226</point>')
+Image: /9j/2wBDAAYEBQYFBAYG
+---
+Thought: 刚才点击了终端管理，但似乎没反应？可能是需要先选中受控主机。现 在yama界面里的受控主机是127.0.0.1那一行，我应该先点击选中这一行，然后再 点击终端管理图标。所以现在先选中127.0.0.1的主机行，确保选中后再操作终端 管理。
+Action: click(point='<point>458 272</point>')
+Image: /9j/2wBDAAYEBQYFBAYG
+---
+Thought: 现在已经选中了受控主机127.0.0.1，接下来需要点击上方的“终端管理”图标。观察yama界面的顶部菜单，找到“终端管理”的按钮（图标），点击它来打开远程终端窗口，完成TM_UI_001的测试步骤。
+Action: click(point='<point>450 226</point>')
+Image: /9j/2wBDAAYEBQYFBAYG
+---
+Thought: 现在TM_UI_001的测试已经完成，远程终端窗口成功打开，显示了连接到127.0.0.1的命令行界面。接下来测试TM_UI_002，需要验证终端窗口标题是否包含目标主机信息（IP地址），以及初始提示符是否正确。观察终端窗口的标题是“127.0.0.1 - 远程终端”，包含了IP地址；窗口内的提示符是“C:\Users\cnpn\Desktop\v1.0.6>”，符合Windows的命令行提示符格式。现在需要确认这些信息，然后进行TM_UI_003的测试，在终端中输入exit命令关闭窗口。首先，确认TM_UI_002的条件满足，然后在终端窗口中输入“exit”并回车，测试是否能正常关闭。
+Action: type(content='exit\n')
+Image:
+---
+Thought: 刚才输入了exit命令，但似乎没执行？可能是需要按回车。现在终端窗 口里已经输入了exit，按回车键执行命令，这样终端窗口应该会关闭，回到主界面，完成TM_UI_003的测试。
+Action: hotkey(key='enter')
+Image:
+---
+终端管理’图标，验证远程终端窗口是否成功打开。\", \"expected_result\": \"远程终端窗口成功打开，显示连接到所选主机的命令行界面。\", \"actual_result\": \"成功打开远程终端窗口，显示连接到127.0.0.1的命令行界面。\", \"status\": \"通过\"}, {\"case_id\": \"TM_UI_002\", \"description\": \"验证打开的终端窗口标题是否包含目标主机信息（如IP地址），以及初始提示符是否正确显示。\", \"expected_result\": \"终端窗口标题显示目标主机IP或名称，窗口内显示目标系统的命令行提示符（如C:\\Users\\...或$）。\", \"actual_result\": \"终端窗口标题为‘127.0.0.1 - 远程终端’（含IP），窗口内提示符为‘C:\\Users\\cnpn\\Desktop\\v1.0.6>’（符合Windows命令行格式）。\", \"status\": \"通过\"}, {\"case_id\": \"TM_UI_003\", \"description\": \"在终端窗口中输入并执行一个简单的命令（如`exit`或`quit`），验证终端窗口是否能正常关闭。\", \"expected_result\": \"终端窗口在执行关闭命令后正常关闭，返回主界面。\", \"actual_result\": \"执行exit命令后，终端窗口正常关闭，返回yama主界面。\", \"status\": \"通过\"} ]}')
+Image:
+---
+PS C:\Users\cnjn\Desktop\UI-TARS-desktop\apps\ui-tars>

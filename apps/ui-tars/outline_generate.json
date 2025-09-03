@@ -1,0 +1,2521 @@
+{
+  "outlines": [
+    {
+      "test_outline_for_function": {
+        "function_name": "终端管理",
+        "image_url": "./images/Console.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "终端功能入口与界面验证",
+            "suite_description": "验证用户如何从主界面进入终端管理功能，并检查终端窗口的初始显示和基本交互。",
+            "test_cases": [
+              {
+                "case_id": "TM_UI_001",
+                "description": "从主界面选中一个受控主机，然后点击“终端管理”图标，验证远程终端窗口是否成功打开。",
+                "expected_result": "远程终端窗口成功打开，显示连接到所选主机的命令行界面。"
+              },
+              {
+                "case_id": "TM_UI_002",
+                "description": "验证打开的终端窗口标题是否包含目标主机信息（如IP地址），以及初始提示符是否正确显示。",
+                "expected_result": "终端窗口标题显示目标主机IP或名称，窗口内显示目标系统的命令行提示符（如C:\\Users\\...或$）。"
+              },
+              {
+                "case_id": "TM_UI_003",
+                "description": "在终端窗口中输入并执行一个简单的命令（如`exit`或`quit`），验证终端窗口是否能正常关闭。",
+                "expected_result": "终端窗口在执行关闭命令后正常关闭，返回主界面。"
+              }
+            ]
+          },
+          {
+            "suite_name": "远程命令执行功能",
+            "suite_description": "测试终端管理功能执行各种远程命令的能力，包括基本命令、带参数命令、多行输出命令和无效命令。",
+            "test_cases": [
+              {
+                "case_id": "TM_CMD_001",
+                "description": "在远程终端中执行一个简单的系统命令（如Windows的`dir`或Linux的`ls`），验证命令是否成功执行并返回正确结果。",
+                "expected_result": "命令成功执行，终端显示目标系统当前目录的文件和文件夹列表。"
+              },
+              {
+                "case_id": "TM_CMD_002",
+                "description": "执行一个带参数的系统命令（如Windows的`ipconfig /all`或Linux的`ifconfig -a`），验证命令是否成功执行并返回详细信息。",
+                "expected_result": "命令成功执行，终端显示目标系统的详细网络配置信息。"
+              },
+              {
+                "case_id": "TM_CMD_003",
+                "description": "执行一个产生多行输出的命令（如Windows的`tree`或Linux的`ps -ef`），验证所有输出内容是否完整显示。",
+                "expected_result": "命令成功执行，终端完整显示所有多行输出内容，且可正常滚动查看。"
+              },
+              {
+                "case_id": "TM_CMD_004",
+                "description": "执行一个改变当前目录的命令（如`cd C:\\`或`cd /tmp`），验证目录是否成功切换，并再次执行`dir`/`ls`确认。",
+                "expected_result": "目录成功切换，后续命令在新的目录下执行，且提示符更新为新目录。"
+              },
+              {
+                "case_id": "TM_CMD_005",
+                "description": "执行一个无效或不存在的命令，验证终端是否返回错误信息。",
+                "expected_result": "终端显示“命令不存在”或“不是内部或外部命令”等错误信息。"
+              },
+              {
+                "case_id": "TM_CMD_006",
+                "description": "尝试执行一个需要特定管理员权限但当前用户可能没有的命令（如Windows的`net user admin password`或Linux的`sudo reboot`），验证终端是否返回权限拒绝错误。",
+                "expected_result": "终端显示“拒绝访问”或“权限不足”等错误信息，命令未成功执行。"
+              }
+            ]
+          },
+          {
+            "suite_name": "终端交互与异常处理",
+            "suite_description": "测试终端窗口的交互性、对特殊输入和异常情况的处理能力。",
+            "test_cases": [
+              {
+                "case_id": "TM_INT_001",
+                "description": "在终端中输入包含特殊字符的命令（如`echo \"Hello & World!\"`），验证命令是否能正确解析并执行。",
+                "expected_result": "命令成功执行，特殊字符被正确处理，并返回预期结果。"
+              },
+              {
+                "case_id": "TM_INT_002",
+                "description": "输入一个非常长的命令（超过一行显示），验证终端是否能正确处理并执行。",
+                "expected_result": "长命令能被完整输入并执行，终端显示结果正常。"
+              },
+              {
+                "case_id": "TM_INT_003",
+                "description": "在远程终端连接期间，模拟目标系统断开连接或无响应，验证终端窗口的提示和行为。",
+                "expected_result": "终端窗口显示连接断开或无响应的提示信息，并禁止进一步输入命令。"
+              },
+              {
+                "case_id": "TM_INT_004",
+                "description": "调整远程终端窗口的大小，验证内容显示和滚动条功能是否正常。",
+                "expected_result": "终端内容根据窗口大小自动调整，当内容超出显示范围时，滚动条出现并可正常使用。"
+              },
+              {
+                "case_id": "TM_INT_005",
+                "description": "从外部复制一段文本（如一个命令或一段脚本），尝试粘贴到远程终端中，验证是否能成功粘贴并执行。",
+                "expected_result": "文本能成功粘贴到终端输入行，并可正常执行。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "进程管理",
+        "image_url": "./images/Process.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "界面显示与数据准确性",
+            "suite_description": "验证进程管理界面的加载、显示、数据完整性及准确性。",
+            "test_cases": [
+              {
+                "case_id": "PM_UI_001",
+                "description": "从主界面选择一个受控主机（如192.168.0.92），点击工具栏上的“进程管理”图标，验证进程管理界面是否正确加载。",
+                "expected_result": "进程管理界面成功加载，标题显示所选主机IP和“进程管理”，并展示该主机上的进程列表。"
+              },
+              {
+                "case_id": "PM_UI_002",
+                "description": "验证进程列表的列名是否正确显示：映像名称、PID、程序个数/路径。",
+                "expected_result": "界面显示“映像名称”、“PID”、“程序个数/路径”三列，且顺序正确。"
+              },
+              {
+                "case_id": "PM_UI_003",
+                "description": "验证进程列表中常见系统进程（如svchost.exe）的信息是否准确显示，包括映像名称、PID和完整路径。",
+                "expected_result": "svchost.exe等系统进程的映像名称、PID和路径信息与实际系统状态一致。"
+              },
+              {
+                "case_id": "PM_UI_004",
+                "description": "验证进程列表是否显示正确的进程总数。",
+                "expected_result": "界面顶部或底部显示当前受控主机上运行的进程总数，且与实际数量相符。"
+              },
+              {
+                "case_id": "PM_UI_005",
+                "description": "验证当进程数量超出当前显示区域时，滚动条是否出现并能正常滚动。",
+                "expected_result": "当进程列表过长时，垂直滚动条出现，用户可以通过滚动条查看所有进程。"
+              },
+              {
+                "case_id": "PM_UI_006",
+                "description": "验证CPU占用和内存使用等关键信息是否正确显示。",
+                "expected_result": "进程列表中包含CPU占用和内存使用等列，并显示准确的实时数据。"
+              },
+              {
+                "case_id": "PM_UI_007",
+                "description": "验证进程列表是否能实时或周期性刷新，以反映进程状态的变化（如CPU/内存使用率、新启动/停止的进程）。",
+                "expected_result": "进程列表能够自动刷新或提供手动刷新功能，确保显示最新的进程信息和资源使用情况。"
+              }
+            ]
+          },
+          {
+            "suite_name": "进程操作 - 启动",
+            "suite_description": "验证用户在受控机器上启动新进程的功能。",
+            "test_cases": [
+              {
+                "case_id": "PM_START_001",
+                "description": "尝试启动一个常见的应用程序（如记事本notepad.exe）。",
+                "expected_result": "记事本程序在受控主机上成功启动，并在进程列表中显示其信息。"
+              },
+              {
+                "case_id": "PM_START_002",
+                "description": "尝试启动一个带命令行参数的程序（例如：cmd.exe /c echo Hello）。",
+                "expected_result": "程序在受控主机上成功启动，并按照指定参数运行。"
+              },
+              {
+                "case_id": "PM_START_003",
+                "description": "尝试启动一个不存在的程序路径或名称。",
+                "expected_result": "系统提示启动失败，并给出相应的错误信息（如“文件未找到”）。"
+              },
+              {
+                "case_id": "PM_START_004",
+                "description": "通过主界面的“服务程序”功能（若与远程启动进程相关）启动一个指定程序。",
+                "expected_result": "指定的服务程序在受控主机上成功启动，并在进程列表中显示。"
+              }
+            ]
+          },
+          {
+            "suite_name": "进程操作 - 停止",
+            "suite_description": "验证用户在受控机器上停止运行中进程的功能。",
+            "test_cases": [
+              {
+                "case_id": "PM_STOP_001",
+                "description": "选择一个用户启动的进程（如记事本），执行停止操作。",
+                "expected_result": "选定的进程在受控主机上成功停止，并从进程列表中移除。"
+              },
+              {
+                "case_id": "PM_STOP_002",
+                "description": "尝试停止一个关键系统进程（如svchost.exe），验证系统响应。",
+                "expected_result": "系统提示操作失败，或提示权限不足，进程未被停止。"
+              },
+              {
+                "case_id": "PM_STOP_003",
+                "description": "尝试停止一个已不存在的进程（通过PID或名称）。",
+                "expected_result": "系统提示进程不存在或操作失败。"
+              },
+              {
+                "case_id": "PM_STOP_004",
+                "description": "选择多个用户启动的进程，执行批量停止操作。",
+                "expected_result": "所有选定的进程在受控主机上成功停止，并从进程列表中移除。"
+              }
+            ]
+          },
+          {
+            "suite_name": "进程操作 - 重启",
+            "suite_description": "验证用户在受控机器上重启运行中进程的功能。",
+            "test_cases": [
+              {
+                "case_id": "PM_RESTART_001",
+                "description": "选择一个用户启动的进程，执行重启操作。",
+                "expected_result": "选定的进程在受控主机上先停止后重新启动，并在进程列表中更新其PID等信息。"
+              },
+              {
+                "case_id": "PM_RESTART_002",
+                "description": "尝试重启一个关键系统进程，验证系统响应。",
+                "expected_result": "系统提示操作失败，或提示权限不足，进程未被重启。"
+              },
+              {
+                "case_id": "PM_RESTART_003",
+                "description": "尝试重启一个已不存在的进程。",
+                "expected_result": "系统提示进程不存在或操作失败。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常处理与性能",
+            "suite_description": "验证功能在异常情况下的处理能力以及在高负载下的性能表现。",
+            "test_cases": [
+              {
+                "case_id": "PM_ERROR_001",
+                "description": "在受控主机断开连接后，尝试进行进程管理操作（启动/停止/重启）。",
+                "expected_result": "系统提示受控主机已离线或连接失败，操作无法执行。"
+              },
+              {
+                "case_id": "PM_ERROR_002",
+                "description": "在受控主机上模拟大量进程运行（例如100+），验证进程管理界面加载和操作的响应速度。",
+                "expected_result": "即使在大量进程下，界面加载和操作响应依然保持在可接受的范围内，无明显卡顿。"
+              },
+              {
+                "case_id": "PM_ERROR_003",
+                "description": "验证长时间监控进程列表，界面和功能是否保持稳定，无内存泄漏或崩溃。",
+                "expected_result": "长时间运行后，进程管理功能依然稳定，无崩溃、内存泄漏或其他异常。"
+              },
+              {
+                "case_id": "PM_ERROR_004",
+                "description": "尝试对需要管理员权限才能操作的进程执行停止/重启操作，但当前用户权限不足。",
+                "expected_result": "系统提示权限不足，操作失败。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "窗口管理",
+        "image_url": "./images/Window.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "UI显示与数据加载",
+            "suite_description": "验证窗口管理界面能够正确加载、显示远程机器上的窗口列表，并确保数据准确性。",
+            "test_cases": [
+              {
+                "case_id": "WM_UI_001",
+                "description": "从主界面（如Yama）选择一个受控主机后，点击“窗口管理”图标，验证窗口管理界面是否正确打开。",
+                "expected_result": "窗口管理界面成功打开，标题显示所选受控主机的IP地址或名称，并开始加载窗口列表。"
+              },
+              {
+                "case_id": "WM_UI_002",
+                "description": "验证窗口管理界面是否显示“句柄”、“窗口名称”、“窗口个数”等列，且列名正确。",
+                "expected_result": "界面显示正确的列标题：句柄、窗口名称、窗口个数。"
+              },
+              {
+                "case_id": "WM_UI_003",
+                "description": "验证窗口列表是否准确显示受控机器上所有当前打开的窗口和运行中的应用程序。",
+                "expected_result": "列表内容与受控机器实际打开的窗口/应用程序一致，包括名称和数量。"
+              },
+              {
+                "case_id": "WM_UI_004",
+                "description": "验证当受控机器没有打开任何窗口时，界面是否正确显示空列表或提示信息。",
+                "expected_result": "界面显示空列表或“无打开窗口”等提示信息。"
+              },
+              {
+                "case_id": "WM_UI_005",
+                "description": "验证当窗口数量较多时，列表是否支持滚动查看所有窗口。",
+                "expected_result": "列表出现滚动条，用户可以通过滚动查看所有窗口。"
+              },
+              {
+                "case_id": "WM_UI_006",
+                "description": "验证窗口名称显示是否完整，特别是长名称或包含特殊字符的名称。",
+                "expected_result": "窗口名称完整显示，长名称可自动截断或显示省略号，特殊字符正常显示。"
+              }
+            ]
+          },
+          {
+            "suite_name": "窗口操作功能",
+            "suite_description": "验证用户可以对远程机器上的窗口执行关闭、最小化、最大化等操作。",
+            "test_cases": [
+              {
+                "case_id": "WM_OP_001",
+                "description": "选择一个普通应用程序窗口（如计算器、记事本），执行“关闭”操作，验证该窗口是否在远程机器上被关闭。",
+                "expected_result": "远程机器上的目标窗口被关闭，且窗口管理列表中该条目消失。"
+              },
+              {
+                "case_id": "WM_OP_002",
+                "description": "选择一个普通应用程序窗口，执行“最小化”操作，验证该窗口是否在远程机器上被最小化。",
+                "expected_result": "远程机器上的目标窗口被最小化到任务栏，且窗口管理列表中状态（如有）更新。"
+              },
+              {
+                "case_id": "WM_OP_003",
+                "description": "选择一个普通应用程序窗口，执行“最大化”操作，验证该窗口是否在远程机器上被最大化。",
+                "expected_result": "远程机器上的目标窗口被最大化，且窗口管理列表中状态（如有）更新。"
+              },
+              {
+                "case_id": "WM_OP_004",
+                "description": "对已最小化的窗口执行“恢复”或“最大化”操作，验证窗口是否恢复正常或最大化。",
+                "expected_result": "已最小化的窗口恢复到正常大小或被最大化。"
+              },
+              {
+                "case_id": "WM_OP_005",
+                "description": "尝试对系统关键窗口（如“Program Manager”或“设置”）执行关闭操作，验证系统是否阻止或给出警告。",
+                "expected_result": "系统阻止关闭操作或弹出警告提示，避免误操作导致系统不稳定。"
+              },
+              {
+                "case_id": "WM_OP_006",
+                "description": "尝试对一个已关闭的窗口执行操作（如最小化），验证系统是否给出错误提示。",
+                "expected_result": "系统提示“窗口不存在”或类似错误信息，操作失败。"
+              }
+            ]
+          },
+          {
+            "suite_name": "实时监控与状态更新",
+            "suite_description": "验证窗口管理功能能够实时反映远程机器上窗口状态的变化。",
+            "test_cases": [
+              {
+                "case_id": "WM_RT_001",
+                "description": "在远程机器上新打开一个应用程序窗口，验证该窗口是否立即出现在窗口管理列表中。",
+                "expected_result": "新打开的窗口在窗口管理列表中实时显示。"
+              },
+              {
+                "case_id": "WM_RT_002",
+                "description": "在远程机器上关闭一个应用程序窗口，验证该窗口是否立即从窗口管理列表中消失。",
+                "expected_result": "被关闭的窗口在窗口管理列表中实时消失。"
+              },
+              {
+                "case_id": "WM_RT_003",
+                "description": "在远程机器上最小化/最大化一个窗口，验证窗口管理列表中该窗口的状态（如有显示）是否同步更新。",
+                "expected_result": "窗口管理列表中对应窗口的状态（如最小化/最大化标识）实时更新。"
+              },
+              {
+                "case_id": "WM_RT_004",
+                "description": "在远程机器上强制结束一个应用程序进程，验证其对应的窗口是否从列表中移除。",
+                "expected_result": "对应的窗口条目从窗口管理列表中移除。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常处理与稳定性",
+            "suite_description": "验证窗口管理功能在异常情况下的处理能力和系统稳定性。",
+            "test_cases": [
+              {
+                "case_id": "WM_EX_001",
+                "description": "在执行窗口操作过程中，远程机器突然断开连接，验证系统是否能妥善处理并给出提示。",
+                "expected_result": "系统提示远程连接已断开，所有窗口操作失败，界面状态更新为未连接。"
+              },
+              {
+                "case_id": "WM_EX_002",
+                "description": "在网络延迟较高或不稳定的情况下，执行窗口操作，验证操作的响应时间和成功率。",
+                "expected_result": "操作可能存在延迟，但最终应成功执行，或在超时后给出明确失败提示。"
+              },
+              {
+                "case_id": "WM_EX_003",
+                "description": "长时间保持窗口管理界面打开并监控，验证系统资源占用和稳定性。",
+                "expected_result": "系统资源（CPU、内存）占用保持在合理水平，界面无崩溃或卡顿现象。"
+              },
+              {
+                "case_id": "WM_EX_004",
+                "description": "尝试对一个无响应的应用程序窗口执行操作，验证系统行为。",
+                "expected_result": "系统尝试执行操作，若无法响应则给出超时或无响应提示，不影响其他窗口操作。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "桌面管理",
+        "image_url": "./images/Remote.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "主界面与连接管理",
+            "suite_description": "测试从主界面选择主机并建立远程桌面连接，以及连接的生命周期管理。",
+            "test_cases": [
+              {
+                "case_id": "DM_UI_001",
+                "description": "前置条件：主界面已显示在线受控主机列表。操作：从主界面列表选择一个在线主机，点击顶部工具栏的“桌面管理”按钮。",
+                "expected_result": "成功弹出远程桌面窗口，显示受控主机的桌面内容，并可进行初步交互。"
+              },
+              {
+                "case_id": "DM_UI_002",
+                "description": "前置条件：主界面已显示受控主机列表。操作：从主界面列表选择一个离线主机，点击“桌面管理”按钮。",
+                "expected_result": "系统提示主机离线或无法连接，不建立远程桌面连接。"
+              },
+              {
+                "case_id": "DM_UI_003",
+                "description": "操作：在主界面通过“服务程序”对话框（或类似手动连接入口）输入一个有效IP和端口，尝试连接。",
+                "expected_result": "若IP和端口有效且主机在线，则成功建立远程桌面连接；否则提示连接失败。"
+              },
+              {
+                "case_id": "DM_CONN_001",
+                "description": "操作：成功建立远程桌面连接后，长时间（例如1小时）保持连接并进行少量操作。",
+                "expected_result": "远程桌面窗口保持稳定，无频繁断开或卡顿现象。"
+              },
+              {
+                "case_id": "DM_CONN_002",
+                "description": "操作：在远程桌面会话中，主动点击关闭按钮或断开连接选项。",
+                "expected_result": "远程桌面窗口关闭，主界面显示该主机状态为离线或可重新连接。"
+              },
+              {
+                "case_id": "DM_CONN_003",
+                "description": "操作：断开连接后，尝试重新连接同一主机。",
+                "expected_result": "成功重新建立远程桌面连接，恢复到断开前的桌面状态（如果支持）。"
+              },
+              {
+                "case_id": "DM_CONN_004",
+                "description": "操作：在远程桌面会话中，被控端主动关闭远程服务或关机。",
+                "expected_result": "控制端远程桌面窗口关闭，并提示连接已中断。"
+              }
+            ]
+          },
+          {
+            "suite_name": "远程桌面基本操作",
+            "suite_description": "测试用户在远程桌面会话中进行的基本交互和操作，确保其流畅性和准确性。",
+            "test_cases": [
+              {
+                "case_id": "DM_OP_001",
+                "description": "操作：在远程桌面中，使用鼠标进行点击、双击、右键、拖拽操作（如打开程序、移动文件）。",
+                "expected_result": "鼠标操作准确响应，与本地操作一致，无明显延迟。"
+              },
+              {
+                "case_id": "DM_OP_002",
+                "description": "操作：在远程桌面中，使用键盘输入文本、数字、特殊字符，并尝试使用常用快捷键（如Ctrl+C, Ctrl+V, Alt+Tab）。",
+                "expected_result": "键盘输入和快捷键功能正常，文本准确显示，操作正确执行。"
+              },
+              {
+                "case_id": "DM_OP_003",
+                "description": "操作：在远程桌面中，打开并关闭多个应用程序（如浏览器、记事本、计算器）。",
+                "expected_result": "应用程序能够正常打开、运行和关闭，无异常崩溃或卡死。"
+              },
+              {
+                "case_id": "DM_OP_004",
+                "description": "操作：在远程桌面中，进行窗口的最小化、最大化、还原和关闭操作。",
+                "expected_result": "窗口操作响应及时，显示状态正确，无显示异常。"
+              },
+              {
+                "case_id": "DM_OP_005",
+                "description": "操作：测试远程桌面窗口的缩放和全屏模式切换功能。",
+                "expected_result": "窗口缩放和全屏切换功能正常，显示内容自适应调整，无显示错位或模糊。"
+              },
+              {
+                "case_id": "DM_OP_006",
+                "description": "操作：测试本地与远程桌面之间的剪贴板共享功能（复制文本、复制图片）。",
+                "expected_result": "本地复制的文本/图片可以粘贴到远程桌面，反之亦然，内容完整无损。"
+              }
+            ]
+          },
+          {
+            "suite_name": "文件与系统管理",
+            "suite_description": "测试远程桌面会话中进行文件管理和系统配置的能力，验证其功能完整性。",
+            "test_cases": [
+              {
+                "case_id": "DM_FM_001",
+                "description": "操作：在远程桌面中，将本地文件拖拽或通过菜单上传到远程主机指定目录。",
+                "expected_result": "文件成功上传到远程主机指定目录，文件内容完整无损，大小一致。"
+              },
+              {
+                "case_id": "DM_FM_002",
+                "description": "操作：在远程桌面中，将远程主机文件拖拽或通过菜单下载到本地主机指定目录。",
+                "expected_result": "文件成功下载到本地主机指定目录，文件内容完整无损，大小一致。"
+              },
+              {
+                "case_id": "DM_FM_003",
+                "description": "操作：在远程桌面中，创建、重命名、移动、复制、删除文件和文件夹。",
+                "expected_result": "文件和文件夹操作成功，远程文件系统状态正确更新，无权限错误。"
+              },
+              {
+                "case_id": "DM_FM_004",
+                "description": "操作：在远程桌面中，访问“计算机”或“此电脑”，查看磁盘驱动器和网络共享。",
+                "expected_result": "能够正常访问并显示远程主机的磁盘驱动器和网络共享信息。"
+              },
+              {
+                "case_id": "DM_SYS_001",
+                "description": "操作：在远程桌面中，打开并操作“控制面板”或“设置”进行系统配置（如修改日期时间、用户账户）。",
+                "expected_result": "控制面板/设置界面正常显示，可进行配置修改，修改结果生效。"
+              },
+              {
+                "case_id": "DM_SYS_002",
+                "description": "操作：在远程桌面中，打开“任务管理器”查看和管理进程（如结束进程）。",
+                "expected_result": "任务管理器正常显示，可查看进程列表，并成功结束指定进程。"
+              },
+              {
+                "case_id": "DM_SYS_003",
+                "description": "操作：尝试通过远程桌面执行关机、重启或注销操作。",
+                "expected_result": "远程主机按指令执行关机/重启/注销，控制端连接中断。"
+              }
+            ]
+          },
+          {
+            "suite_name": "性能与稳定性测试",
+            "suite_description": "评估远程桌面功能在不同网络条件和长时间使用下的性能和稳定性。",
+            "test_cases": [
+              {
+                "case_id": "DM_PERF_001",
+                "description": "操作：在良好网络环境下，长时间（如4小时）保持远程桌面连接并进行中等强度操作。",
+                "expected_result": "连接稳定，操作流畅，无明显卡顿、延迟或断开现象。"
+              },
+              {
+                "case_id": "DM_PERF_002",
+                "description": "操作：在网络延迟较高（模拟弱网）的环境下，进行远程桌面操作。",
+                "expected_result": "操作可能存在延迟，但仍能正常响应，不出现连接中断或严重卡死。"
+              },
+              {
+                "case_id": "DM_PERF_003",
+                "description": "操作：在远程桌面中进行大量图形操作（如播放高清视频、运行图形密集型应用）。",
+                "expected_result": "画面传输流畅度可接受，不出现严重花屏、卡顿或连接中断。"
+              },
+              {
+                "case_id": "DM_PERF_004",
+                "description": "操作：测试大文件（如1GB）的上传和下载速度，并监控资源占用。",
+                "expected_result": "文件传输速度符合预期，传输过程中连接稳定，文件完整；客户端和服务器资源占用在合理范围内。"
+              }
+            ]
+          },
+          {
+            "suite_name": "安全与权限管理",
+            "suite_description": "测试远程桌面功能的安全性，包括认证和权限控制，确保只有授权用户能进行操作。",
+            "test_cases": [
+              {
+                "case_id": "DM_SEC_001",
+                "description": "操作：尝试使用错误的凭据（用户名/密码）连接远程桌面。",
+                "expected_result": "连接失败，系统提示认证失败或凭据错误，无法建立连接。"
+              },
+              {
+                "case_id": "DM_SEC_002",
+                "description": "操作：验证不同用户权限对远程桌面操作的影响（如普通用户尝试执行管理员操作）。",
+                "expected_result": "权限控制生效，普通用户无法执行需要管理员权限的操作，并收到相应提示。"
+              },
+              {
+                "case_id": "DM_SEC_003",
+                "description": "操作：测试远程桌面会话的锁定和解锁功能（如果支持）。",
+                "expected_result": "远程桌面可以被锁定，需要正确凭据才能解锁并恢复会话。"
+              }
+            ]
+          },
+          {
+            "suite_name": "兼容性与异常处理",
+            "suite_description": "测试远程桌面功能在不同环境下的兼容性以及对异常情况的处理能力。",
+            "test_cases": [
+              {
+                "case_id": "DM_COMP_001",
+                "description": "操作：连接不同操作系统的远程主机（如Windows 7, Windows 10）。",
+                "expected_result": "在不同操作系统上均能成功建立连接并进行正常操作，无兼容性问题。"
+              },
+              {
+                "case_id": "DM_COMP_002",
+                "description": "操作：连接具有不同屏幕分辨率的远程主机。",
+                "expected_result": "远程桌面显示内容能正确适应不同分辨率，无显示错位或裁剪。"
+              },
+              {
+                "case_id": "DM_COMP_003",
+                "description": "操作：在远程桌面会话中，模拟网络突然断开。",
+                "expected_result": "远程桌面窗口关闭或提示连接中断，并能正确处理断线重连逻辑（如果支持）。"
+              },
+              {
+                "case_id": "DM_COMP_004",
+                "description": "操作：在远程桌面会话中，被控端系统崩溃或蓝屏。",
+                "expected_result": "控制端远程桌面窗口关闭，并提示连接已中断或目标主机异常。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "文件管理",
+        "image_url": "./images/FileManage.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "界面与功能入口",
+            "suite_description": "验证文件管理界面的正确显示、布局以及从主界面进入该功能的路径。",
+            "test_cases": [
+              {
+                "case_id": "FM_UI_001",
+                "description": "从主界面进入文件管理功能，验证界面是否正确加载。",
+                "expected_result": "在主界面选中一个受控机器，点击“文件管理”图标后，文件管理窗口弹出，显示本地和远程文件系统，且标题栏显示远程机器IP。"
+              },
+              {
+                "case_id": "FM_UI_002",
+                "description": "验证本地和远程文件区域的初始显示。",
+                "expected_result": "本地区域默认显示本地驱动器列表（如C:\\, D:\\），远程区域默认显示远程机器的根目录或指定目录。"
+              },
+              {
+                "case_id": "FM_UI_003",
+                "description": "验证工具栏按钮的可用性和图标显示。",
+                "expected_result": "工具栏按钮（如新建文件夹、删除、刷新、视图模式、停止）图标清晰，且在适当场景下启用/禁用状态正确。"
+              },
+              {
+                "case_id": "FM_UI_004",
+                "description": "验证路径显示框和下拉菜单功能。",
+                "expected_result": "本地和远程路径显示框能正确显示当前路径，点击下拉菜单能显示历史路径或常用路径。"
+              }
+            ]
+          },
+          {
+            "suite_name": "本地文件操作",
+            "suite_description": "验证用户在本地文件管理区域进行文件和文件夹的创建、重命名、删除、复制、剪切等操作。",
+            "test_cases": [
+              {
+                "case_id": "FM_LOCAL_001",
+                "description": "在本地区域创建新文件夹。",
+                "expected_result": "新文件夹成功创建，并显示在当前目录下。"
+              },
+              {
+                "case_id": "FM_LOCAL_002",
+                "description": "重命名本地文件或文件夹。",
+                "expected_result": "文件或文件夹名称成功更改，且内容保持不变。"
+              },
+              {
+                "case_id": "FM_LOCAL_003",
+                "description": "删除本地文件或文件夹。",
+                "expected_result": "选定的文件或文件夹成功删除，不再显示在列表中。"
+              },
+              {
+                "case_id": "FM_LOCAL_004",
+                "description": "在本地区域内复制文件或文件夹。",
+                "expected_result": "文件或文件夹成功复制到目标路径，源文件/文件夹保持不变。"
+              },
+              {
+                "case_id": "FM_LOCAL_005",
+                "description": "在本地区域内剪切文件或文件夹。",
+                "expected_result": "文件或文件夹成功移动到目标路径，源文件/文件夹被移除。"
+              },
+              {
+                "case_id": "FM_LOCAL_006",
+                "description": "刷新本地文件列表。",
+                "expected_result": "本地文件列表内容更新，反映最新的文件系统状态。"
+              }
+            ]
+          },
+          {
+            "suite_name": "远程文件操作",
+            "suite_description": "验证用户在远程文件管理区域进行文件和文件夹的创建、重命名、删除、复制、剪切等操作。",
+            "test_cases": [
+              {
+                "case_id": "FM_REMOTE_001",
+                "description": "在远程区域创建新文件夹。",
+                "expected_result": "新文件夹成功在远程机器上创建，并显示在当前目录下。"
+              },
+              {
+                "case_id": "FM_REMOTE_002",
+                "description": "重命名远程文件或文件夹。",
+                "expected_result": "远程文件或文件夹名称成功更改，且内容保持不变。"
+              },
+              {
+                "case_id": "FM_REMOTE_003",
+                "description": "删除远程文件或文件夹。",
+                "expected_result": "选定的远程文件或文件夹成功删除，不再显示在列表中。"
+              },
+              {
+                "case_id": "FM_REMOTE_004",
+                "description": "在远程区域内复制文件或文件夹。",
+                "expected_result": "远程文件或文件夹成功复制到目标路径，源文件/文件夹保持不变。"
+              },
+              {
+                "case_id": "FM_REMOTE_005",
+                "description": "在远程区域内剪切文件或文件夹。",
+                "expected_result": "远程文件或文件夹成功移动到目标路径，源文件/文件夹被移除。"
+              },
+              {
+                "case_id": "FM_REMOTE_006",
+                "description": "刷新远程文件列表。",
+                "expected_result": "远程文件列表内容更新，反映远程机器最新的文件系统状态。"
+              },
+              {
+                "case_id": "FM_REMOTE_007",
+                "description": "导航远程目录。",
+                "expected_result": "用户可以双击文件夹进入子目录，点击上级目录按钮返回父目录，路径显示正确更新。"
+              }
+            ]
+          },
+          {
+            "suite_name": "文件传输 (上传与下载)",
+            "suite_description": "验证文件和文件夹在本地与远程机器之间上传和下载的正确性、完整性与效率。",
+            "test_cases": [
+              {
+                "case_id": "FM_TRANSFER_001",
+                "description": "上传单个文件从本地到远程。",
+                "expected_result": "文件成功上传到远程指定目录，内容完整且大小一致。"
+              },
+              {
+                "case_id": "FM_TRANSFER_002",
+                "description": "上传多个文件从本地到远程。",
+                "expected_result": "所有选定文件成功上传到远程指定目录，内容完整且大小一致。"
+              },
+              {
+                "case_id": "FM_TRANSFER_003",
+                "description": "上传整个文件夹（包含子文件夹和文件）从本地到远程。",
+                "expected_result": "整个文件夹结构及其所有内容成功上传到远程指定目录，结构和内容完整。"
+              },
+              {
+                "case_id": "FM_TRANSFER_004",
+                "description": "下载单个文件从远程到本地。",
+                "expected_result": "文件成功下载到本地指定目录，内容完整且大小一致。"
+              },
+              {
+                "case_id": "FM_TRANSFER_005",
+                "description": "下载多个文件从远程到本地。",
+                "expected_result": "所有选定文件成功下载到本地指定目录，内容完整且大小一致。"
+              },
+              {
+                "case_id": "FM_TRANSFER_006",
+                "description": "下载整个文件夹（包含子文件夹和文件）从远程到本地。",
+                "expected_result": "整个文件夹结构及其所有内容成功下载到本地指定目录，结构和内容完整。"
+              },
+              {
+                "case_id": "FM_TRANSFER_007",
+                "description": "传输过程中取消操作。",
+                "expected_result": "传输操作被中断，已传输部分文件应被清理或保持一致状态，无数据损坏。"
+              },
+              {
+                "case_id": "FM_TRANSFER_008",
+                "description": "传输同名文件时，验证覆盖或跳过提示。",
+                "expected_result": "系统弹出提示，询问用户是覆盖、跳过还是重命名，并根据用户选择执行相应操作。"
+              },
+              {
+                "case_id": "FM_TRANSFER_009",
+                "description": "传输包含特殊字符的文件名。",
+                "expected_result": "文件成功传输，文件名在目标系统上保持正确或按目标系统规则进行转换。"
+              }
+            ]
+          },
+          {
+            "suite_name": "文件同步与高级功能",
+            "suite_description": "验证文件同步功能（如果存在）以及其他描述中提及的远程操作，确保数据在不同设备间的流通与整合。",
+            "test_cases": [
+              {
+                "case_id": "FM_SYNC_001",
+                "description": "验证文件同步功能（例如，仅传输差异文件或更新文件）。",
+                "expected_result": "执行同步操作后，仅有修改或新增的文件被传输，未修改的文件不重复传输，节省传输时间。"
+              },
+              {
+                "case_id": "FM_SYNC_002",
+                "description": "验证远程操作的安全性，例如权限控制。",
+                "expected_result": "用户只能在具有相应权限的目录下进行操作，无权限操作应被拒绝并给出提示。"
+              },
+              {
+                "case_id": "FM_SYNC_003",
+                "description": "验证部署应用程序场景下的文件传输。",
+                "expected_result": "能够将应用程序所需的所有文件和文件夹完整、正确地传输到远程机器的指定部署路径。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常处理与性能",
+            "suite_description": "验证系统在异常情况下的行为，以及处理大量数据时的性能表现。",
+            "test_cases": [
+              {
+                "case_id": "FM_ERROR_001",
+                "description": "在文件传输过程中断开网络连接。",
+                "expected_result": "传输失败，系统给出明确的错误提示，并允许用户在网络恢复后重试或取消。"
+              },
+              {
+                "case_id": "FM_ERROR_002",
+                "description": "目标路径磁盘空间不足时进行文件传输。",
+                "expected_result": "传输失败，系统给出磁盘空间不足的错误提示。"
+              },
+              {
+                "case_id": "FM_ERROR_003",
+                "description": "尝试操作无权限的文件或目录。",
+                "expected_result": "操作被拒绝，系统给出权限不足的错误提示。"
+              },
+              {
+                "case_id": "FM_ERROR_004",
+                "description": "远程机器离线时尝试进行文件操作。",
+                "expected_result": "系统提示远程机器离线，所有远程操作均不可用或失败。"
+              },
+              {
+                "case_id": "FM_PERF_001",
+                "description": "传输大量小文件（例如10000个1KB文件）。",
+                "expected_result": "文件传输成功，性能在可接受范围内，无明显卡顿或崩溃。"
+              },
+              {
+                "case_id": "FM_PERF_002",
+                "description": "传输单个大文件（例如10GB文件）。",
+                "expected_result": "文件传输成功，传输进度条或状态显示正常，传输速度符合预期。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "语音管理",
+        "image_url": "./images/Voice.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "功能入口与界面显示",
+            "suite_description": "验证用户能否正确进入语音管理功能，并检查初始界面的显示与交互元素。",
+            "test_cases": [
+              {
+                "case_id": "VM_UI_001",
+                "description": "从主界面选择一个在线的受控设备，并点击语音管理功能入口。",
+                "expected_result": "成功打开“语音监听”窗口，窗口标题显示受控设备的IP地址或名称，并显示“正在监听远程声音...”及数据接收指示。"
+              },
+              {
+                "case_id": "VM_UI_002",
+                "description": "检查“语音监听”窗口的标题显示。",
+                "expected_result": "窗口标题应包含受控设备的标识（如IP地址）和“语音监听”字样。"
+              },
+              {
+                "case_id": "VM_UI_003",
+                "description": "检查初始状态下，窗口是否显示“正在监听远程声音...”文本和数据接收指示（如“Receive X KBytes”）。",
+                "expected_result": "窗口应显示“正在监听远程声音...”文本，并有动态更新的数据接收量提示。"
+              },
+              {
+                "case_id": "VM_UI_004",
+                "description": "检查“发送本地语音到远程”复选框的初始状态。",
+                "expected_result": "复选框初始状态应为未选中，且文本清晰可见。"
+              },
+              {
+                "case_id": "VM_UI_005",
+                "description": "关闭语音监听窗口。",
+                "expected_result": "语音监听窗口成功关闭，且远程监听会话终止。"
+              }
+            ]
+          },
+          {
+            "suite_name": "远程监听功能",
+            "suite_description": "验证核心的远程环境声音监听功能，包括正常情况和异常情况。",
+            "test_cases": [
+              {
+                "case_id": "VM_LISTEN_001",
+                "description": "在受控设备麦克风正常工作且网络稳定的情况下，开始远程监听。",
+                "expected_result": "本地端能实时接收并播放远程环境声音，声音清晰，无明显延迟或卡顿，数据接收量持续增加。"
+              },
+              {
+                "case_id": "VM_LISTEN_002",
+                "description": "验证接收到的音频质量，包括清晰度、音量和是否存在杂音。",
+                "expected_result": "接收到的音频应清晰可辨，音量适中，无明显电流声、噪音或失真。"
+              },
+              {
+                "case_id": "VM_LISTEN_003",
+                "description": "受控设备无麦克风或麦克风故障时，尝试进行远程监听。",
+                "expected_result": "本地端应提示“远程设备无麦克风”或“麦克风故障”，无法接收到声音，数据接收量可能为0或极少。"
+              },
+              {
+                "case_id": "VM_LISTEN_004",
+                "description": "受控设备麦克风被其他应用程序占用时，尝试进行远程监听。",
+                "expected_result": "本地端应提示“远程麦克风被占用”或类似错误信息，无法接收到声音。"
+              },
+              {
+                "case_id": "VM_LISTEN_005",
+                "description": "在监听过程中，远程设备麦克风被拔出或禁用。",
+                "expected_result": "本地端应停止接收声音，并显示相应的提示信息（如“远程麦克风已断开”）。"
+              }
+            ]
+          },
+          {
+            "suite_name": "本地语音发送功能",
+            "suite_description": "验证用户向远程设备发送本地语音的功能（对讲），包括正常情况和异常情况。",
+            "test_cases": [
+              {
+                "case_id": "VM_SEND_001",
+                "description": "在本地和远程设备麦克风、扬声器均正常工作且网络稳定的情况下，勾选“发送本地语音到远程”复选框，并对着本地麦克风讲话。",
+                "expected_result": "远程设备能实时接收并播放本地语音，声音清晰，无明显延迟或卡顿。本地端应能继续监听远程声音。"
+              },
+              {
+                "case_id": "VM_SEND_002",
+                "description": "验证发送语音的质量，包括清晰度、音量和是否存在杂音。",
+                "expected_result": "远程设备播放的本地语音应清晰可辨，音量适中，无明显电流声、噪音或失真。"
+              },
+              {
+                "case_id": "VM_SEND_003",
+                "description": "本地设备无麦克风或麦克风故障时，尝试勾选“发送本地语音到远程”并讲话。",
+                "expected_result": "本地端应提示“本地设备无麦克风”或“麦克风故障”，无法发送语音。"
+              },
+              {
+                "case_id": "VM_SEND_004",
+                "description": "在发送本地语音过程中，取消勾选“发送本地语音到远程”复选框。",
+                "expected_result": "本地语音发送立即停止，但远程监听功能应继续正常工作。"
+              },
+              {
+                "case_id": "VM_SEND_005",
+                "description": "在发送本地语音过程中，本地麦克风被拔出或禁用。",
+                "expected_result": "本地语音发送停止，并显示相应的提示信息（如“本地麦克风已断开”）。"
+              }
+            ]
+          },
+          {
+            "suite_name": "网络连接与稳定性",
+            "suite_description": "验证功能在不同网络条件下的表现，包括网络中断、延迟和带宽不足等情况。",
+            "test_cases": [
+              {
+                "case_id": "VM_NET_001",
+                "description": "在监听/发送过程中，模拟网络短暂中断后恢复。",
+                "expected_result": "网络恢复后，功能应能自动重连并恢复监听/发送，或给出明确的重连提示。"
+              },
+              {
+                "case_id": "VM_NET_002",
+                "description": "在网络延迟较高（如200ms以上）的情况下，进行监听和发送。",
+                "expected_result": "监听和发送可能存在明显延迟，但音频流应保持连续，不应出现频繁断流或连接中断。"
+              },
+              {
+                "case_id": "VM_NET_003",
+                "description": "在网络带宽不足的情况下，进行监听和发送。",
+                "expected_result": "音频质量可能下降（如出现卡顿、失真），但功能应尽量维持连接，不应直接崩溃。"
+              },
+              {
+                "case_id": "VM_NET_004",
+                "description": "长时间（如数小时）稳定进行远程监听和本地语音发送。",
+                "expected_result": "功能应保持稳定运行，无内存泄漏，无崩溃，音频流持续稳定，数据接收量持续增加。"
+              },
+              {
+                "case_id": "VM_NET_005",
+                "description": "在监听/发送过程中，远程受控设备突然离线。",
+                "expected_result": "本地端应立即检测到远程设备离线，停止监听/发送，并显示相应的提示信息。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常情况与错误处理",
+            "suite_description": "验证系统在遇到各种异常情况时的处理能力和用户友好性。",
+            "test_cases": [
+              {
+                "case_id": "VM_ERR_001",
+                "description": "尝试对一个不存在或未上线的受控设备进行语音管理。",
+                "expected_result": "系统应提示“受控设备不在线”或“连接失败”，无法打开语音监听窗口。"
+              },
+              {
+                "case_id": "VM_ERR_002",
+                "description": "远程设备操作系统拒绝了麦克风权限。",
+                "expected_result": "本地端应收到错误提示，说明远程麦克风权限不足，无法进行监听。"
+              },
+              {
+                "case_id": "VM_ERR_003",
+                "description": "本地设备操作系统拒绝了麦克风权限。",
+                "expected_result": "尝试发送本地语音时，本地端应收到错误提示，说明本地麦克风权限不足，无法发送语音。"
+              },
+              {
+                "case_id": "VM_ERR_004",
+                "description": "在监听过程中，远程设备的音频服务崩溃或被强制关闭。",
+                "expected_result": "本地端应检测到远程音频流中断，并显示错误或断开连接的提示。"
+              },
+              {
+                "case_id": "VM_ERR_005",
+                "description": "尝试同时对多个受控设备进行语音管理（如果功能支持）。",
+                "expected_result": "如果支持，应能同时打开多个监听窗口并正常工作；如果不支持，应提示“已在监听其他设备”或限制操作。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "视频管理",
+        "image_url": "./images/Video.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "功能入口与界面显示",
+            "suite_description": "验证视频管理功能的入口、界面的正确加载与基本操作，确保用户能顺利访问和控制视频流窗口。",
+            "test_cases": [
+              {
+                "case_id": "VM_UI_001",
+                "description": "从主界面选择一个在线主机后，点击“视频管理”图标，验证视频管理窗口是否正确弹出。",
+                "expected_result": "视频管理窗口成功弹出，标题显示远程主机IP和“视频管理”，并显示默认分辨率（例如 640x480）。"
+              },
+              {
+                "case_id": "VM_UI_002",
+                "description": "验证视频管理窗口的标题栏是否正确显示远程主机信息和功能名称。",
+                "expected_result": "窗口标题栏显示格式为“IP地址 - 视频管理 分辨率”（例如：192.168.0.92 - 视频管理 640x480）。"
+              },
+              {
+                "case_id": "VM_UI_003",
+                "description": "验证视频管理窗口的最小化、最大化和关闭功能。",
+                "expected_result": "窗口可以正常最小化、最大化和关闭，关闭后视频流停止。"
+              },
+              {
+                "case_id": "VM_UI_004",
+                "description": "验证在未选择任何主机或选择离线主机时，点击“视频管理”图标的反馈。",
+                "expected_result": "系统提示用户选择在线主机或显示错误信息，视频管理窗口不弹出。"
+              }
+            ]
+          },
+          {
+            "suite_name": "实时视频流功能",
+            "suite_description": "验证实时视频流的连接、显示质量和稳定性，确保用户能够进行有效的远程监控。",
+            "test_cases": [
+              {
+                "case_id": "VM_STR_001",
+                "description": "连接到具有摄像头的在线主机，验证实时视频流是否成功显示。",
+                "expected_result": "视频管理窗口内成功显示远程设备的实时摄像头画面，画面流畅无卡顿。"
+              },
+              {
+                "case_id": "VM_STR_002",
+                "description": "验证视频流的实时性，通过远程设备摄像头前的物体移动来观察延迟。",
+                "expected_result": "视频流延迟在可接受范围内（例如，小于500ms），画面与实际场景同步。"
+              },
+              {
+                "case_id": "VM_STR_003",
+                "description": "在不同网络环境下（如局域网、广域网）测试视频流的质量和流畅度。",
+                "expected_result": "在良好网络环境下视频流清晰流畅；在带宽受限环境下，视频质量可能下降但仍能保持连续性。"
+              },
+              {
+                "case_id": "VM_STR_004",
+                "description": "验证视频流的清晰度，是否足以进行远程诊断和环境监测。",
+                "expected_result": "视频画面清晰，细节可辨，能够满足远程诊断和环境监测的基本需求。"
+              },
+              {
+                "case_id": "VM_STR_005",
+                "description": "（如果支持）验证当远程设备有多个摄像头时，是否可以切换摄像头。",
+                "expected_result": "如果支持，应提供切换摄像头的选项，并能成功切换显示不同摄像头的画面。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常情况与错误处理",
+            "suite_description": "验证在各种异常情况下，视频管理功能的表现和错误处理机制，确保系统的健壮性。",
+            "test_cases": [
+              {
+                "case_id": "VM_ERR_001",
+                "description": "在视频流播放过程中，远程设备突然断开网络连接。",
+                "expected_result": "视频流停止，窗口显示连接中断或错误信息，并自动关闭或提供重连选项。"
+              },
+              {
+                "case_id": "VM_ERR_002",
+                "description": "连接到没有摄像头的远程设备。",
+                "expected_result": "系统提示远程设备无可用摄像头，视频管理窗口不显示画面或显示错误信息。"
+              },
+              {
+                "case_id": "VM_ERR_003",
+                "description": "在视频流播放过程中，远程设备上的摄像头被禁用或拔出。",
+                "expected_result": "视频流停止，窗口显示摄像头不可用或错误信息。"
+              },
+              {
+                "case_id": "VM_ERR_004",
+                "description": "尝试同时打开多个远程设备的视频管理窗口（如果系统允许）。",
+                "expected_result": "如果允许，所有窗口应独立显示各自的视频流；如果限制，系统应提示并阻止多开。"
+              },
+              {
+                "case_id": "VM_ERR_005",
+                "description": "在网络带宽极低的情况下尝试连接视频流。",
+                "expected_result": "视频流可能卡顿、延迟严重或无法连接，系统应有相应的提示或降级处理。"
+              }
+            ]
+          },
+          {
+            "suite_name": "性能与稳定性",
+            "suite_description": "评估视频管理功能在长时间运行和高负载下的性能表现和稳定性，确保其可靠性。",
+            "test_cases": [
+              {
+                "case_id": "VM_PERF_001",
+                "description": "长时间（例如数小时）保持视频流连接，观察其稳定性。",
+                "expected_result": "视频流应持续稳定播放，无意外中断、卡顿或内存泄漏现象。"
+              },
+              {
+                "case_id": "VM_PERF_002",
+                "description": "在视频流播放过程中，监控本地客户端的CPU和内存占用。",
+                "expected_result": "CPU和内存占用应在合理范围内，无异常飙升或持续增长。"
+              },
+              {
+                "case_id": "VM_PERF_003",
+                "description": "快速重复打开和关闭视频管理窗口，观察系统响应。",
+                "expected_result": "窗口应能快速响应打开和关闭操作，无残留进程或资源未释放问题。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "服务管理",
+        "image_url": "./images/Service.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "UI与访问验证",
+            "suite_description": "验证服务管理功能的入口、界面加载、基本元素显示以及与主界面的交互。",
+            "test_cases": [
+              {
+                "case_id": "SM_UI_001",
+                "description": "从主界面选择一个受控主机后，进入服务管理功能。",
+                "expected_result": "成功打开“服务管理”窗口，窗口标题显示为“<IP地址> - 服务管理”，并开始加载服务列表。"
+              },
+              {
+                "case_id": "SM_UI_002",
+                "description": "验证服务列表的初始显示和列信息。",
+                "expected_result": "服务列表正常显示，包含“真实名称”、“显示名称”、“启动类型”、“运行状态”等列，且数据区域非空。"
+              },
+              {
+                "case_id": "SM_UI_003",
+                "description": "验证服务数量统计显示。",
+                "expected_result": "窗口顶部或底部正确显示当前加载的服务总数，与列表中实际服务数量一致。"
+              },
+              {
+                "case_id": "SM_UI_004",
+                "description": "验证服务列表的滚动功能。",
+                "expected_result": "当服务数量超出当前显示区域时，滚动条出现并可正常拖动，显示所有服务。"
+              }
+            ]
+          },
+          {
+            "suite_name": "服务列表显示与数据准确性",
+            "suite_description": "验证服务列表内容的准确性、完整性以及刷新机制。",
+            "test_cases": [
+              {
+                "case_id": "SM_LIST_001",
+                "description": "验证服务列表中的服务信息与远程机器实际服务状态一致。",
+                "expected_result": "随机选取多个服务，其“真实名称”、“显示名称”、“启动类型”和“运行状态”与远程机器上的服务管理器中显示的信息完全匹配。"
+              },
+              {
+                "case_id": "SM_LIST_002",
+                "description": "验证服务列表的实时性（例如，在远程机器上操作服务后，本地列表是否更新）。",
+                "expected_result": "在远程机器上启动/停止/禁用某个服务后，服务管理界面刷新或手动刷新后，该服务的状态能及时更新。"
+              },
+              {
+                "case_id": "SM_LIST_003",
+                "description": "验证服务列表的排序功能（若支持）。",
+                "expected_result": "点击列头（如“真实名称”、“显示名称”），服务列表能按升序/降序正确排序。"
+              },
+              {
+                "case_id": "SM_LIST_004",
+                "description": "验证服务列表的筛选/搜索功能（若支持）。",
+                "expected_result": "在搜索框输入服务名称或关键字，列表能正确筛选出匹配的服务。"
+              }
+            ]
+          },
+          {
+            "suite_name": "服务操作 - 启动",
+            "suite_description": "测试对远程机器上服务的启动操作。",
+            "test_cases": [
+              {
+                "case_id": "SM_OP_START_001",
+                "description": "启动一个当前处于“停止”状态的服务。",
+                "expected_result": "服务状态变为“运行”，操作成功提示，且远程机器上服务实际已启动。"
+              },
+              {
+                "case_id": "SM_OP_START_002",
+                "description": "尝试启动一个当前已处于“运行”状态的服务。",
+                "expected_result": "系统提示服务已在运行，或操作无效果，不报错。"
+              },
+              {
+                "case_id": "SM_OP_START_003",
+                "description": "尝试启动一个当前处于“禁用”状态的服务。",
+                "expected_result": "操作失败，系统提示服务已被禁用，或需要先启用才能启动。"
+              },
+              {
+                "case_id": "SM_OP_START_004",
+                "description": "启动一个具有依赖关系的服务。",
+                "expected_result": "服务及其所有依赖服务均成功启动，服务状态变为“运行”。"
+              },
+              {
+                "case_id": "SM_OP_START_005",
+                "description": "启动一个因配置错误或资源不足而无法启动的服务。",
+                "expected_result": "操作失败，系统给出明确的错误提示信息。"
+              }
+            ]
+          },
+          {
+            "suite_name": "服务操作 - 停止",
+            "suite_description": "测试对远程机器上服务的停止操作。",
+            "test_cases": [
+              {
+                "case_id": "SM_OP_STOP_001",
+                "description": "停止一个当前处于“运行”状态的服务。",
+                "expected_result": "服务状态变为“停止”，操作成功提示，且远程机器上服务实际已停止。"
+              },
+              {
+                "case_id": "SM_OP_STOP_002",
+                "description": "尝试停止一个当前已处于“停止”状态的服务。",
+                "expected_result": "系统提示服务已停止，或操作无效果，不报错。"
+              },
+              {
+                "case_id": "SM_OP_STOP_003",
+                "description": "停止一个有其他服务依赖它的服务。",
+                "expected_result": "系统提示有依赖服务，询问是否一并停止，确认后所有相关服务均停止。"
+              },
+              {
+                "case_id": "SM_OP_STOP_004",
+                "description": "停止一个无法停止的服务（例如，被系统保护或卡死）。",
+                "expected_result": "操作失败，系统给出明确的错误提示信息。"
+              },
+              {
+                "case_id": "SM_OP_STOP_005",
+                "description": "尝试停止一个关键系统服务（如RPC服务）。",
+                "expected_result": "系统阻止操作或给出严重警告，防止误操作导致系统不稳定。"
+              }
+            ]
+          },
+          {
+            "suite_name": "服务操作 - 重启",
+            "suite_description": "测试对远程机器上服务的重启操作。",
+            "test_cases": [
+              {
+                "case_id": "SM_OP_RESTART_001",
+                "description": "重启一个当前处于“运行”状态的服务。",
+                "expected_result": "服务先停止后启动，最终状态仍为“运行”，操作成功提示。"
+              },
+              {
+                "case_id": "SM_OP_RESTART_002",
+                "description": "重启一个当前处于“停止”状态的服务。",
+                "expected_result": "服务直接启动，最终状态变为“运行”，操作成功提示。"
+              },
+              {
+                "case_id": "SM_OP_RESTART_003",
+                "description": "尝试重启一个当前处于“禁用”状态的服务。",
+                "expected_result": "操作失败，系统提示服务已被禁用。"
+              },
+              {
+                "case_id": "SM_OP_RESTART_004",
+                "description": "重启一个在停止或启动过程中失败的服务。",
+                "expected_result": "操作失败，系统给出明确的错误提示信息，服务状态保持失败前的状态或变为停止。"
+              }
+            ]
+          },
+          {
+            "suite_name": "服务操作 - 禁用/启用",
+            "suite_description": "测试对远程机器上服务的禁用和启用操作。",
+            "test_cases": [
+              {
+                "case_id": "SM_OP_DISABLE_001",
+                "description": "禁用一个当前处于“运行”状态的服务。",
+                "expected_result": "服务先停止，然后启动类型变为“禁用”，操作成功提示。"
+              },
+              {
+                "case_id": "SM_OP_DISABLE_002",
+                "description": "禁用一个当前处于“停止”状态的服务。",
+                "expected_result": "服务启动类型变为“禁用”，操作成功提示。"
+              },
+              {
+                "case_id": "SM_OP_DISABLE_003",
+                "description": "启用一个当前处于“禁用”状态的服务。",
+                "expected_result": "服务启动类型变为“手动”或“自动”（取决于原先设置或默认），操作成功提示，但服务不会自动启动。"
+              },
+              {
+                "case_id": "SM_OP_DISABLE_004",
+                "description": "尝试禁用一个关键系统服务（如RPC服务）。",
+                "expected_result": "系统阻止操作或给出严重警告，防止误操作导致系统不稳定。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常处理与边界条件",
+            "suite_description": "测试服务管理功能在异常情况和边界条件下的行为。",
+            "test_cases": [
+              {
+                "case_id": "SM_ERR_001",
+                "description": "在执行服务操作时，远程机器突然断开连接。",
+                "expected_result": "操作失败，系统提示远程机器连接中断，服务状态保持不变或显示为未知。"
+              },
+              {
+                "case_id": "SM_ERR_002",
+                "description": "尝试对一个不存在的服务执行操作（例如，通过某种方式构造请求）。",
+                "expected_result": "操作失败，系统提示服务不存在。"
+              },
+              {
+                "case_id": "SM_ERR_003",
+                "description": "远程机器上服务列表非常庞大（例如，数百个服务）。",
+                "expected_result": "服务列表能正常加载和显示，UI响应速度可接受，滚动和操作无明显卡顿。"
+              },
+              {
+                "case_id": "SM_ERR_004",
+                "description": "当前用户在远程机器上没有足够权限执行服务操作。",
+                "expected_result": "操作失败，系统提示权限不足，并阻止执行操作。"
+              },
+              {
+                "case_id": "SM_ERR_005",
+                "description": "网络延迟较高时执行服务操作。",
+                "expected_result": "操作可能需要更长时间完成，但最终能成功或失败并给出相应提示，不会导致界面卡死或崩溃。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "注册表管理",
+        "image_url": "./images/Register.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "连接与界面初始化",
+            "suite_description": "验证用户从主界面选择受控机器后，能够成功打开注册表管理界面，并正确显示远程或本地注册表内容。",
+            "test_cases": [
+              {
+                "case_id": "RM_CONN_001",
+                "description": "前置条件：主界面已连接至少一台受控主机。步骤：1. 在主界面选中一台受控主机。2. 点击工具栏中的“注册表管理”图标。验证是否成功打开注册表管理界面。",
+                "expected_result": "注册表管理界面成功打开，标题显示连接的IP地址或主机名，左侧树形结构显示根键（如HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE）。"
+              },
+              {
+                "case_id": "RM_CONN_002",
+                "description": "尝试连接一个不可达或无权限的主机，点击“注册表管理”图标，验证错误提示。",
+                "expected_result": "系统弹出明确的错误提示，说明无法连接或权限不足，注册表管理界面未能打开。"
+              },
+              {
+                "case_id": "RM_CONN_003",
+                "description": "验证注册表管理界面左侧树形结构是否正确显示所有主要的根键（如HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, HKEY_USERS, HKEY_CURRENT_CONFIG）。",
+                "expected_result": "所有主要的注册表根键均正确显示在左侧树形结构中。"
+              },
+              {
+                "case_id": "RM_CONN_004",
+                "description": "验证首次打开界面时，右侧内容区域是否显示当前选中键（通常是根键）的默认值（若有）。",
+                "expected_result": "右侧内容区域正确显示当前选中根键的默认值信息。"
+              },
+              {
+                "case_id": "RM_CONN_005",
+                "description": "验证是否存在“本地注册表”或“本机”选项，并尝试打开本地注册表。",
+                "expected_result": "如果支持本地操作，能够成功打开并显示本地机器的注册表内容。"
+              }
+            ]
+          },
+          {
+            "suite_name": "注册表浏览与查看",
+            "suite_description": "验证用户能够正确浏览注册表树形结构，并查看注册表项及其关联的值。",
+            "test_cases": [
+              {
+                "case_id": "RM_VIEW_001",
+                "description": "展开/折叠左侧树形结构中的不同层级的注册表项，验证其子项的显示与隐藏。",
+                "expected_result": "注册表项能够正确展开和折叠，子项显示和隐藏逻辑正确。"
+              },
+              {
+                "case_id": "RM_VIEW_002",
+                "description": "点击左侧树形结构中的不同注册表项，验证右侧内容区域是否正确显示该项下的所有值（名称、类型、数据）。",
+                "expected_result": "右侧内容区域准确显示选中注册表项的所有值，包括名称、类型和数据。"
+              },
+              {
+                "case_id": "RM_VIEW_003",
+                "description": "验证不同类型（如REG_SZ, REG_DWORD, REG_BINARY, REG_MULTI_SZ等）的注册表值是否正确显示其数据格式。",
+                "expected_result": "各种类型的注册表值数据均以其对应的格式正确显示（例如，REG_DWORD显示为十进制或十六进制，REG_BINARY显示为十六进制字节）。"
+              },
+              {
+                "case_id": "RM_VIEW_004",
+                "description": "验证长路径或包含特殊字符的注册表项和值是否能正常显示，无截断或乱码。",
+                "expected_result": "长路径和特殊字符的注册表项/值能够完整且正确地显示。"
+              },
+              {
+                "case_id": "RM_VIEW_005",
+                "description": "验证右侧值列表的排序功能（如按名称、类型、数据升序/降序）。",
+                "expected_result": "值列表能够根据选择的列进行正确的排序。"
+              }
+            ]
+          },
+          {
+            "suite_name": "修改注册表值",
+            "suite_description": "验证用户能够成功修改现有注册表项的值。",
+            "test_cases": [
+              {
+                "case_id": "RM_MOD_001",
+                "description": "选择一个REG_SZ类型的值，双击或右键选择“修改”，输入新字符串，验证修改后数据是否正确保存并显示。",
+                "expected_result": "REG_SZ类型的值成功修改，新数据正确显示。"
+              },
+              {
+                "case_id": "RM_MOD_002",
+                "description": "选择一个REG_DWORD类型的值，修改其数据（十进制和十六进制），验证修改后数据是否正确保存并显示。",
+                "expected_result": "REG_DWORD类型的值成功修改，新数据以正确的进制格式显示。"
+              },
+              {
+                "case_id": "RM_MOD_003",
+                "description": "选择一个REG_BINARY类型的值，修改其数据，验证修改后数据是否正确保存并显示。",
+                "expected_result": "REG_BINARY类型的值成功修改，新数据正确显示。"
+              },
+              {
+                "case_id": "RM_MOD_004",
+                "description": "尝试修改一个不存在的值，验证系统行为。",
+                "expected_result": "系统应提示该值不存在或不允许修改，操作失败。"
+              },
+              {
+                "case_id": "RM_MOD_005",
+                "description": "尝试修改一个受保护的系统值（如无足够权限），验证错误提示。",
+                "expected_result": "系统弹出权限不足的错误提示，修改操作被阻止。"
+              },
+              {
+                "case_id": "RM_MOD_006",
+                "description": "对特定类型的值输入无效数据格式（如REG_DWORD输入非数字字符），验证错误提示。",
+                "expected_result": "系统弹出数据格式不正确的错误提示，修改操作失败。"
+              }
+            ]
+          },
+          {
+            "suite_name": "添加注册表项与值",
+            "suite_description": "验证用户能够成功在指定位置添加新的注册表项和不同类型的注册表值。",
+            "test_cases": [
+              {
+                "case_id": "RM_ADD_001",
+                "description": "在某个可写注册表项下，右键选择“新建”->“项”，输入新项名称，验证新建项是否显示在树形结构中。",
+                "expected_result": "新注册表项成功创建并显示在指定位置。"
+              },
+              {
+                "case_id": "RM_ADD_002",
+                "description": "在新建的子项下，右键选择“新建”->“字符串值”，并赋值，验证其显示。",
+                "expected_result": "REG_SZ类型的值成功创建并显示，数据正确。"
+              },
+              {
+                "case_id": "RM_ADD_003",
+                "description": "在新建的子项下，右键选择“新建”->“DWORD(32位)值”，并赋值，验证其显示。",
+                "expected_result": "REG_DWORD类型的值成功创建并显示，数据正确。"
+              },
+              {
+                "case_id": "RM_ADD_004",
+                "description": "在新建的子项下，右键选择“新建”->“二进制值”，并赋值，验证其显示。",
+                "expected_result": "REG_BINARY类型的值成功创建并显示，数据正确。"
+              },
+              {
+                "case_id": "RM_ADD_005",
+                "description": "尝试在无权限的注册表路径下新建项或值，验证错误提示。",
+                "expected_result": "系统弹出权限不足的错误提示，新建操作被阻止。"
+              },
+              {
+                "case_id": "RM_ADD_006",
+                "description": "尝试在同一路径下创建同名项或同名值，验证系统行为。",
+                "expected_result": "系统应提示同名项/值已存在，不允许重复创建或提示是否覆盖（如果支持覆盖）。"
+              },
+              {
+                "case_id": "RM_ADD_007",
+                "description": "创建包含特殊字符（如空格、下划线、连字符）的项名或值名，验证其显示和操作是否正常。",
+                "expected_result": "包含特殊字符的项名或值名能够正常创建、显示和后续操作。"
+              }
+            ]
+          },
+          {
+            "suite_name": "删除注册表项与值",
+            "suite_description": "验证用户能够成功删除注册表项及其关联的值。",
+            "test_cases": [
+              {
+                "case_id": "RM_DEL_001",
+                "description": "选择一个自定义的注册表值，右键选择“删除”，验证其是否从列表中消失。",
+                "expected_result": "注册表值成功删除，不再显示在列表中。"
+              },
+              {
+                "case_id": "RM_DEL_002",
+                "description": "选择一个不包含子项和值的自定义注册表项，右键选择“删除”，验证其是否从树形结构中消失。",
+                "expected_result": "不含子项和值的注册表项成功删除，不再显示在树形结构中。"
+              },
+              {
+                "case_id": "RM_DEL_003",
+                "description": "选择一个包含子项和值的自定义注册表项，右键选择“删除”，验证所有相关内容是否被递归删除。",
+                "expected_result": "包含子项和值的注册表项及其所有子项和值均被成功删除。"
+              },
+              {
+                "case_id": "RM_DEL_004",
+                "description": "尝试删除一个不存在的项或值，验证系统行为。",
+                "expected_result": "系统应提示该项/值不存在，操作失败。"
+              },
+              {
+                "case_id": "RM_DEL_005",
+                "description": "尝试删除一个受保护的系统注册表项或值（如无足够权限），验证错误提示。",
+                "expected_result": "系统弹出权限不足的错误提示，删除操作被阻止。"
+              },
+              {
+                "case_id": "RM_DEL_006",
+                "description": "验证删除操作前是否有确认提示，且用户取消删除后，项/值仍存在。",
+                "expected_result": "删除操作前弹出确认对话框，用户取消后，项/值未被删除。"
+              }
+            ]
+          },
+          {
+            "suite_name": "权限与错误处理",
+            "suite_description": "验证系统在不同权限级别、网络异常或无效操作下的行为和错误处理机制。",
+            "test_cases": [
+              {
+                "case_id": "RM_ERR_001",
+                "description": "使用只读权限的用户连接受控机器，验证是否无法执行修改、添加、删除注册表操作。",
+                "expected_result": "只读用户无法执行任何修改注册表的操作，系统弹出权限不足提示。"
+              },
+              {
+                "case_id": "RM_ERR_002",
+                "description": "在注册表操作过程中（如修改值时）断开与受控机器的网络连接，验证错误提示和界面状态。",
+                "expected_result": "系统弹出网络连接中断的错误提示，操作失败，界面状态保持一致性或提示重新连接。"
+              },
+              {
+                "case_id": "RM_ERR_003",
+                "description": "尝试对系统关键注册表项进行非法操作（如删除HKEY_LOCAL_MACHINE\\SOFTWARE），验证系统是否阻止并给出警告。",
+                "expected_result": "系统阻止对关键注册表项的非法操作，并弹出警告或错误提示。"
+              },
+              {
+                "case_id": "RM_ERR_004",
+                "description": "验证当远程机器的注册表服务停止时，连接尝试的错误提示。",
+                "expected_result": "系统弹出明确的错误提示，指示远程注册表服务不可用。"
+              },
+              {
+                "case_id": "RM_ERR_005",
+                "description": "验证长时间无操作后，会话是否保持活跃或提示重新连接。",
+                "expected_result": "会话保持活跃或在超时后提示用户重新连接，避免数据丢失或操作中断。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "Linux 客户端支持",
+        "image_url": "./images/LinuxClient.png",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "FM_ENTRY_CONN",
+            "suite_description": "验证Linux客户端在主界面的显示、选择以及远程终端功能的正确入口与连接稳定性。测试路径：从主界面主机列表选择Linux客户端，进入远程控制。",
+            "test_cases": [
+              {
+                "case_id": "FM_ENTRY_CONN_001",
+                "description": "验证Linux客户端在主界面的主机列表中正确显示。",
+                "expected_result": "主界面主机列表显示至少一个操作系统为“Linux”的受控客户端，且状态正常。"
+              },
+              {
+                "case_id": "FM_ENTRY_CONN_002",
+                "description": "验证选中Linux客户端后，远程控制选项（如远程终端）可用。",
+                "expected_result": "选中Linux客户端后，相关远程控制菜单或按钮（如“远程管理”下的“远程终端”）变为可点击状态。"
+              },
+              {
+                "case_id": "FM_ENTRY_CONN_003",
+                "description": "验证成功打开Linux客户端的远程终端窗口。",
+                "expected_result": "成功打开一个独立的远程终端窗口，显示Linux客户端的命令行提示符。"
+              },
+              {
+                "case_id": "FM_ENTRY_CONN_004",
+                "description": "验证远程终端连接的初始稳定性。",
+                "expected_result": "远程终端窗口打开后，保持连接稳定，无异常断开或错误提示。"
+              }
+            ]
+          },
+          {
+            "suite_name": "FM_TERM_BASIC",
+            "suite_description": "验证远程终端窗口中基本命令的执行、输出显示及交互能力。",
+            "test_cases": [
+              {
+                "case_id": "FM_TERM_BASIC_001",
+                "description": "执行简单命令（如 `ls`, `pwd`, `whoami`）并验证输出。",
+                "expected_result": "命令成功执行，终端窗口显示正确的命令输出。"
+              },
+              {
+                "case_id": "FM_TERM_BASIC_002",
+                "description": "执行带参数的命令（如 `ls -l`, `cat /etc/os-release`）并验证输出。",
+                "expected_result": "命令成功执行，终端窗口显示带参数命令的正确输出。"
+              },
+              {
+                "case_id": "FM_TERM_BASIC_003",
+                "description": "执行产生多行输出的命令（如 `df -h`, `ps aux`）并验证显示完整性。",
+                "expected_result": "命令成功执行，终端窗口完整显示所有输出行，无截断或乱码。"
+              },
+              {
+                "case_id": "FM_TERM_BASIC_004",
+                "description": "执行无输出的命令（如 `touch test.txt`, `mkdir test_dir`）并验证返回提示符。",
+                "expected_result": "命令成功执行，终端窗口不显示额外输出，直接返回新的命令行提示符。"
+              },
+              {
+                "case_id": "FM_TERM_BASIC_005",
+                "description": "验证输入命令时，字符的正确显示与回显。",
+                "expected_result": "输入的字符在终端窗口中正确显示，无延迟或乱码。"
+              }
+            ]
+          },
+          {
+            "suite_name": "FM_TERM_ADV_ERR",
+            "suite_description": "验证远程终端在复杂场景、异常情况下的行为以及窗口管理能力。",
+            "test_cases": [
+              {
+                "case_id": "FM_TERM_ADV_ERR_001",
+                "description": "执行不存在的命令或语法错误的命令。",
+                "expected_result": "终端窗口显示Linux系统返回的错误信息（如 \"command not found\"），并返回提示符。"
+              },
+              {
+                "case_id": "FM_TERM_ADV_ERR_002",
+                "description": "执行需要特定权限的命令（如 `sudo apt update`，在非root用户下）。",
+                "expected_result": "终端窗口显示权限不足的错误信息（如 \"Permission denied\"），或提示输入密码。"
+              },
+              {
+                "case_id": "FM_TERM_ADV_ERR_003",
+                "description": "执行长时间运行的命令（如 `sleep 10`）并验证终端响应。",
+                "expected_result": "命令执行期间终端保持等待状态，命令结束后返回提示符。期间终端窗口不卡死。"
+              },
+              {
+                "case_id": "FM_TERM_ADV_ERR_004",
+                "description": "验证远程终端窗口的关闭操作。",
+                "expected_result": "点击关闭按钮后，远程终端窗口正常关闭，不影响主程序或其他连接。"
+              },
+              {
+                "case_id": "FM_TERM_ADV_ERR_005",
+                "description": "在远程终端会话期间模拟网络中断，并验证客户端行为。",
+                "expected_result": "终端窗口显示连接中断提示，并尝试重连或提示用户手动操作。"
+              },
+              {
+                "case_id": "FM_TERM_ADV_ERR_006",
+                "description": "验证远程终端窗口的标题是否包含连接信息（如IP地址）。",
+                "expected_result": "远程终端窗口标题栏显示连接的Linux客户端的IP地址或其他识别信息。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "生成客户端",
+        "image_url": "./images/BuildDlg.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "功能入口与界面显示测试",
+            "suite_description": "测试从主界面进入“生成客户端”功能的入口、对话框的正确显示以及基本UI元素的验证。",
+            "test_cases": [
+              {
+                "case_id": "FM_GC_UI_001",
+                "description": "从主界面工具栏点击“生成服务端”图标，验证“生成服务端”对话框是否正确弹出。",
+                "expected_result": "“生成服务端”对话框（标题为“生成服务端”）成功弹出，且所有UI元素（服务程序、加密、主控IP地址、Port输入框、确定按钮、关闭按钮）均可见并可交互。"
+              },
+              {
+                "case_id": "FM_GC_UI_002",
+                "description": "验证对话框的标题与功能描述是否一致。",
+                "expected_result": "对话框标题显示为“生成服务端”，与功能描述“生成客户端”存在差异，应记录此不一致。"
+              },
+              {
+                "case_id": "FM_GC_UI_003",
+                "description": "点击对话框右上角的“X”按钮，验证对话框是否关闭。",
+                "expected_result": "“生成服务端”对话框关闭，返回主界面。"
+              },
+              {
+                "case_id": "FM_GC_UI_004",
+                "description": "验证“服务程序”下拉框的默认选项和可选列表。",
+                "expected_result": "“服务程序”下拉框默认显示“TestRun.exe”，下拉列表包含“TestRun.exe”、“ghost.exe”、“ServerDll.dll”和“选择文件”选项。"
+              },
+              {
+                "case_id": "FM_GC_UI_005",
+                "description": "验证“加密”下拉框的默认选项。",
+                "expected_result": "“加密”下拉框默认显示“无”。"
+              },
+              {
+                "case_id": "FM_GC_UI_006",
+                "description": "验证“主控IP地址”和“Port”输入框的默认值或预填充行为。",
+                "expected_result": "“主控IP地址”输入框可能为空或根据主界面选中项预填充IP地址；“Port”输入框默认显示“6543”。"
+              }
+            ]
+          },
+          {
+            "suite_name": "服务程序选择测试",
+            "suite_description": "测试“服务程序”下拉框中不同选项的选择以及“选择文件”功能的行为。",
+            "test_cases": [
+              {
+                "case_id": "FM_GC_SP_001",
+                "description": "从“服务程序”下拉框中选择“TestRun.exe”。",
+                "expected_result": "“服务程序”输入框显示“TestRun.exe”。"
+              },
+              {
+                "case_id": "FM_GC_SP_002",
+                "description": "从“服务程序”下拉框中选择“ghost.exe”。",
+                "expected_result": "“服务程序”输入框显示“ghost.exe”。"
+              },
+              {
+                "case_id": "FM_GC_SP_003",
+                "description": "从“服务程序”下拉框中选择“ServerDll.dll”。",
+                "expected_result": "“服务程序”输入框显示“ServerDll.dll”。"
+              },
+              {
+                "case_id": "FM_GC_SP_004",
+                "description": "从“服务程序”下拉框中选择“选择文件”，并在弹出的文件选择对话框中选择一个有效的可执行文件（例如.exe）。",
+                "expected_result": "文件选择对话框弹出，选择文件后，“服务程序”输入框显示所选文件的完整路径和名称。"
+              },
+              {
+                "case_id": "FM_GC_SP_005",
+                "description": "从“服务程序”下拉框中选择“选择文件”，并在弹出的文件选择对话框中选择一个无效的文件类型（例如.txt, .jpg）。",
+                "expected_result": "系统提示文件类型无效或无法选择，或者“服务程序”输入框不更新，保持原值。"
+              },
+              {
+                "case_id": "FM_GC_SP_006",
+                "description": "从“服务程序”下拉框中选择“选择文件”，并在弹出的文件选择对话框中点击“取消”。",
+                "expected_result": "文件选择对话框关闭，“服务程序”输入框保持选择前的状态或默认值。"
+              }
+            ]
+          },
+          {
+            "suite_name": "加密选项配置测试",
+            "suite_description": "测试“加密”下拉框的功能。",
+            "test_cases": [
+              {
+                "case_id": "FM_GC_ENC_001",
+                "description": "验证“加密”下拉框的默认选项是否为“无”。",
+                "expected_result": "“加密”下拉框默认显示“无”。"
+              },
+              {
+                "case_id": "FM_GC_ENC_002",
+                "description": "（如果存在其他加密选项）选择其他加密选项，验证是否能成功切换。",
+                "expected_result": "下拉框显示所选的加密选项。"
+              }
+            ]
+          },
+          {
+            "suite_name": "主控IP地址配置测试",
+            "suite_description": "测试“主控IP地址”输入框对不同IP地址格式的接受和验证。",
+            "test_cases": [
+              {
+                "case_id": "FM_GC_IP_001",
+                "description": "输入一个有效的IPv4地址（例如：192.168.1.100）。",
+                "expected_result": "IP地址输入框接受并显示该IP地址。"
+              },
+              {
+                "case_id": "FM_GC_IP_002",
+                "description": "输入一个无效的IPv4格式（例如：999.999.999.999，abc.def.ghi.jkl，192.168.1）。",
+                "expected_result": "系统提示IP地址格式无效，或输入框拒绝输入无效字符，或在点击“确定”时提示错误。"
+              },
+              {
+                "case_id": "FM_GC_IP_003",
+                "description": "输入一个空的IP地址。",
+                "expected_result": "系统提示IP地址不能为空，或在点击“确定”时提示错误。"
+              },
+              {
+                "case_id": "FM_GC_IP_004",
+                "description": "输入一个环回地址（127.0.0.1）。",
+                "expected_result": "IP地址输入框接受并显示该IP地址。"
+              },
+              {
+                "case_id": "FM_GC_IP_005",
+                "description": "输入一个广播地址（255.255.255.255）。",
+                "expected_result": "IP地址输入框接受并显示该IP地址。"
+              },
+              {
+                "case_id": "FM_GC_IP_006",
+                "description": "验证IP地址是否能从主界面选中项自动填充（如Yama.jpg所示）。",
+                "expected_result": "如果主界面有选中项，IP地址输入框应自动填充所选主机的IP地址。"
+              }
+            ]
+          },
+          {
+            "suite_name": "端口号配置测试",
+            "suite_description": "测试“Port”输入框对不同端口号的接受和验证。",
+            "test_cases": [
+              {
+                "case_id": "FM_GC_PORT_001",
+                "description": "输入一个有效的端口号（例如：80, 443, 6543, 65535）。",
+                "expected_result": "Port输入框接受并显示该端口号。"
+              },
+              {
+                "case_id": "FM_GC_PORT_002",
+                "description": "输入一个保留端口号（例如：21, 22, 23）。",
+                "expected_result": "Port输入框接受并显示该端口号，但应注意其潜在的冲突风险。"
+              },
+              {
+                "case_id": "FM_GC_PORT_003",
+                "description": "输入端口号0。",
+                "expected_result": "系统提示端口号无效，或在点击“确定”时提示错误。"
+              },
+              {
+                "case_id": "FM_GC_PORT_004",
+                "description": "输入一个大于65535的端口号。",
+                "expected_result": "系统提示端口号无效，或输入框拒绝输入，或在点击“确定”时提示错误。"
+              },
+              {
+                "case_id": "FM_GC_PORT_005",
+                "description": "输入非数字字符。",
+                "expected_result": "输入框拒绝非数字字符，或在点击“确定”时提示错误。"
+              },
+              {
+                "case_id": "FM_GC_PORT_006",
+                "description": "输入一个空的端口号。",
+                "expected_result": "系统提示端口号不能为空，或在点击“确定”时提示错误。"
+              }
+            ]
+          },
+          {
+            "suite_name": "客户端生成流程测试",
+            "suite_description": "测试在不同输入组合下，点击“确定”按钮后客户端程序的生成、编译和保存过程。",
+            "test_cases": [
+              {
+                "case_id": "FM_GC_PROC_001",
+                "description": "使用所有有效且符合逻辑的输入（服务程序、IP、Port），点击“确定”按钮。",
+                "expected_result": "客户端程序成功创建并编译，生成一个可执行文件，并显示成功提示信息。文件应保存到用户指定或默认路径。"
+              },
+              {
+                "case_id": "FM_GC_PROC_002",
+                "description": "在“服务程序”未选择或选择无效文件的情况下，点击“确定”按钮。",
+                "expected_result": "系统提示“服务程序”无效或未选择，客户端生成失败。"
+              },
+              {
+                "case_id": "FM_GC_PROC_003",
+                "description": "在“主控IP地址”输入无效值的情况下，点击“确定”按钮。",
+                "expected_result": "系统提示IP地址无效，客户端生成失败。"
+              },
+              {
+                "case_id": "FM_GC_PROC_004",
+                "description": "在“Port”输入无效值的情况下，点击“确定”按钮。",
+                "expected_result": "系统提示端口号无效，客户端生成失败。"
+              },
+              {
+                "case_id": "FM_GC_PROC_005",
+                "description": "在磁盘空间不足的情况下尝试生成客户端。",
+                "expected_result": "系统提示磁盘空间不足，客户端生成失败。"
+              },
+              {
+                "case_id": "FM_GC_PROC_006",
+                "description": "在没有足够权限写入目标路径的情况下尝试生成客户端。",
+                "expected_result": "系统提示权限不足，客户端生成失败。"
+              },
+              {
+                "case_id": "FM_GC_PROC_007",
+                "description": "（如果涉及编译）模拟编译失败的情况（例如，所选服务程序文件损坏或缺少依赖）。",
+                "expected_result": "系统提示编译失败及具体原因，客户端生成失败。"
+              }
+            ]
+          },
+          {
+            "suite_name": "生成客户端输出验证测试",
+            "suite_description": "测试成功生成客户端后，对输出文件的属性进行验证。",
+            "test_cases": [
+              {
+                "case_id": "FM_GC_OUT_001",
+                "description": "验证成功生成的客户端文件是否存在于预期路径。",
+                "expected_result": "客户端文件存在于指定或默认的输出路径。"
+              },
+              {
+                "case_id": "FM_GC_OUT_002",
+                "description": "验证生成客户端的文件名和扩展名是否符合预期。",
+                "expected_result": "文件名应与服务程序名称相关，扩展名通常为.exe或.dll。"
+              },
+              {
+                "case_id": "FM_GC_OUT_003",
+                "description": "验证生成客户端的文件大小是否合理（非0字节）。",
+                "expected_result": "文件大小应大于0字节，且与所选服务程序及编译结果相符。"
+              },
+              {
+                "case_id": "FM_GC_OUT_004",
+                "description": "验证生成客户端文件是否可执行。",
+                "expected_result": "双击文件应能正常启动，或至少不报错。"
+              },
+              {
+                "case_id": "FM_GC_OUT_005",
+                "description": "（如果可能）验证生成客户端内部是否正确嵌入了配置的IP地址和端口号。",
+                "expected_result": "通过工具或反编译检查，客户端应包含配置的IP地址和端口号。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "授权管理",
+        "image_url": "./images/AuthDlg.jpg",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "授权界面访问与显示",
+            "suite_description": "验证授权管理界面的正确访问路径、显示内容和基本交互元素。根据主界面描述，授权功能可能通过“生成服务”入口触发。",
+            "test_cases": [
+              {
+                "case_id": "AM_UI_001",
+                "description": "从主界面点击“生成服务”相关入口，验证授权管理弹窗是否正确显示。",
+                "expected_result": "授权管理弹窗（标题为“口令”）正确显示，包含“序列号”、“口令”输入框和“确定”按钮。"
+              },
+              {
+                "case_id": "AM_UI_002",
+                "description": "验证授权管理弹窗的标题、图标和关闭按钮。",
+                "expected_result": "弹窗标题为“口令”，显示正确的锁形图标，右上角有可点击的关闭按钮。"
+              },
+              {
+                "case_id": "AM_UI_003",
+                "description": "验证“序列号”字段的显示与可编辑性。",
+                "expected_result": "“序列号”字段显示预设值（如“05a6-3433-04e1-be66”），且为只读状态，用户无法修改。"
+              },
+              {
+                "case_id": "AM_UI_004",
+                "description": "验证“口令”输入框的显示与可编辑性。",
+                "expected_result": "“口令”输入框为空，可接受用户输入，且输入内容默认显示为明文。"
+              },
+              {
+                "case_id": "AM_UI_005",
+                "description": "点击弹窗右上角的关闭按钮，验证弹窗是否关闭。",
+                "expected_result": "授权管理弹窗关闭，不影响主界面状态。"
+              }
+            ]
+          },
+          {
+            "suite_name": "有效口令授权",
+            "suite_description": "验证使用有效口令进行授权的成功场景，确保生成服务可正常使用。",
+            "test_cases": [
+              {
+                "case_id": "AM_AUTH_001",
+                "description": "在“口令”输入框中输入一个有效的口令，点击“确定”按钮。",
+                "expected_result": "授权成功，授权管理弹窗关闭，生成服务功能变为可用状态。"
+              },
+              {
+                "case_id": "AM_AUTH_002",
+                "description": "成功授权后，验证是否可以正常访问和使用生成服务。",
+                "expected_result": "生成服务相关操作不再受限，可以正常执行。"
+              },
+              {
+                "case_id": "AM_AUTH_003",
+                "description": "成功授权后，再次尝试打开授权管理弹窗。",
+                "expected_result": "授权管理弹窗不再弹出，或弹出后显示已授权状态（如果系统有此设计）。"
+              },
+              {
+                "case_id": "AM_AUTH_004",
+                "description": "成功授权后，关闭并重新启动应用程序，验证授权状态是否持久化。",
+                "expected_result": "应用程序重启后，生成服务仍处于已授权状态，无需再次输入口令。"
+              }
+            ]
+          },
+          {
+            "suite_name": "无效口令授权",
+            "suite_description": "验证使用无效、错误或空口令进行授权的失败场景，确保系统安全性和错误提示的准确性。",
+            "test_cases": [
+              {
+                "case_id": "AM_AUTH_005",
+                "description": "在“口令”输入框中输入一个错误的口令，点击“确定”按钮。",
+                "expected_result": "授权失败，系统弹出明确的错误提示（如“口令错误”），授权管理弹窗不关闭，用户可再次尝试输入。"
+              },
+              {
+                "case_id": "AM_AUTH_006",
+                "description": "在“口令”输入框中留空，点击“确定”按钮。",
+                "expected_result": "授权失败，系统弹出明确的错误提示（如“口令不能为空”），授权管理弹窗不关闭，用户可再次尝试输入。"
+              },
+              {
+                "case_id": "AM_AUTH_007",
+                "description": "在“口令”输入框中输入格式不正确的口令（如长度不足/超长，或包含非法字符，如果口令有格式要求），点击“确定”按钮。",
+                "expected_result": "授权失败，系统弹出明确的错误提示（如“口令格式不正确”），授权管理弹窗不关闭，用户可再次尝试输入。"
+              },
+              {
+                "case_id": "AM_AUTH_008",
+                "description": "连续多次（如5次）输入错误的口令，验证系统是否有锁定或限制机制。",
+                "expected_result": "系统应有防暴力破解机制，如在多次失败后暂时锁定授权功能或要求验证码，并给出相应提示。"
+              }
+            ]
+          },
+          {
+            "suite_name": "口令输入与交互",
+            "suite_description": "验证口令输入框的各种交互行为和限制，确保用户体验和数据完整性。",
+            "test_cases": [
+              {
+                "case_id": "AM_INPUT_001",
+                "description": "在“口令”输入框中输入包含空格、特殊字符（如!@#$%^&*()）的口令。",
+                "expected_result": "输入框能正常接受并显示这些字符，不出现乱码或截断。"
+              },
+              {
+                "case_id": "AM_INPUT_002",
+                "description": "在“口令”输入框中输入超长字符串（如256个字符），验证输入框的限制。",
+                "expected_result": "输入框应有合理的长度限制，超出部分无法输入或自动截断，且不影响系统稳定性。"
+              },
+              {
+                "case_id": "AM_INPUT_003",
+                "description": "验证“口令”输入框是否支持复制（Ctrl+C）和粘贴（Ctrl+V）操作。",
+                "expected_result": "输入框支持复制和粘贴功能，粘贴内容能正确显示。"
+              },
+              {
+                "case_id": "AM_INPUT_004",
+                "description": "验证在输入口令时，按Enter键是否等同于点击“确定”按钮。",
+                "expected_result": "按Enter键应触发授权提交操作，行为与点击“确定”按钮一致。"
+              }
+            ]
+          },
+          {
+            "suite_name": "授权状态管理",
+            "suite_description": "验证系统对授权状态的维护、更新和撤销机制（如果存在）。",
+            "test_cases": [
+              {
+                "case_id": "AM_STATE_001",
+                "description": "模拟授权口令过期场景（如果口令有有效期），验证生成服务是否自动失效。",
+                "expected_result": "口令过期后，生成服务应自动变为不可用状态，并提示用户重新授权。"
+              },
+              {
+                "case_id": "AM_STATE_002",
+                "description": "验证是否存在撤销授权的机制（如“注销”或“清除凭证”功能）。",
+                "expected_result": "如果存在撤销授权功能，执行后生成服务应变为未授权状态，需要重新授权。"
+              },
+              {
+                "case_id": "AM_STATE_003",
+                "description": "在多用户或多会话环境下，验证授权状态是否独立或共享。",
+                "expected_result": "根据系统设计，授权状态应在不同用户或会话间保持独立或共享，且行为符合预期。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "键盘记录",
+        "image_url": "",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "功能入口与状态管理",
+            "suite_description": "验证键盘记录功能的入口、启用/禁用操作及其状态的正确性。",
+            "test_cases": [
+              {
+                "case_id": "KL_UI_001",
+                "description": "从主界面选中一个受控主机后，找到并进入键盘记录功能界面。",
+                "expected_result": "成功进入键盘记录功能界面或相关设置页面，显示当前记录状态。"
+              },
+              {
+                "case_id": "KL_STATUS_001",
+                "description": "启用键盘记录功能。",
+                "expected_result": "键盘记录功能成功启用，界面显示为“正在记录”或类似状态，并开始捕获输入。"
+              },
+              {
+                "case_id": "KL_STATUS_002",
+                "description": "禁用键盘记录功能。",
+                "expected_result": "键盘记录功能成功禁用，界面显示为“已停止”或类似状态，停止捕获输入。"
+              },
+              {
+                "case_id": "KL_STATUS_003",
+                "description": "检查键盘记录功能的当前状态显示是否正确。",
+                "expected_result": "功能状态显示与实际启用/禁用状态一致。"
+              },
+              {
+                "case_id": "KL_STATUS_004",
+                "description": "在记录过程中断开与受控主机的连接，然后重新连接。",
+                "expected_result": "断开连接后记录停止或进入离线模式，重新连接后根据配置恢复记录或保持停止状态。"
+              }
+            ]
+          },
+          {
+            "suite_name": "键盘输入捕获",
+            "suite_description": "验证键盘记录功能能否准确捕获各种类型的键盘输入、时间戳及上下文信息。",
+            "test_cases": [
+              {
+                "case_id": "KL_CAPTURE_001",
+                "description": "在受控主机上输入标准字母（大小写）和数字。",
+                "expected_result": "日志中准确记录所有输入的字母和数字，包括大小写。"
+              },
+              {
+                "case_id": "KL_CAPTURE_002",
+                "description": "在受控主机上输入特殊字符（如!@#$%^&*()_+{}[]|\\:;\"'<>,.?/）。",
+                "expected_result": "日志中准确记录所有输入的特殊字符。"
+              },
+              {
+                "case_id": "KL_CAPTURE_003",
+                "description": "在受控主机上使用功能键（F1-F12）、修饰键（Shift, Ctrl, Alt）及组合键（如Ctrl+C, Alt+Tab）。",
+                "expected_result": "日志中准确记录功能键、修饰键及其组合键的事件。"
+              },
+              {
+                "case_id": "KL_CAPTURE_004",
+                "description": "在受控主机上使用导航键（Home, End, PgUp, PgDn, Arrow keys）和编辑键（Backspace, Delete, Insert, Enter, Tab, Esc）。",
+                "expected_result": "日志中准确记录导航键和编辑键的事件。"
+              },
+              {
+                "case_id": "KL_CAPTURE_005",
+                "description": "在受控主机上切换不同应用程序（如记事本、浏览器、Word）并进行输入。",
+                "expected_result": "日志中准确记录在不同应用程序中的输入，并能关联到相应的应用程序上下文信息。"
+              },
+              {
+                "case_id": "KL_CAPTURE_006",
+                "description": "在受控主机上使用不同的输入法（如中文拼音、五笔）进行输入。",
+                "expected_result": "日志中准确记录不同输入法产生的最终字符，而非输入法中间状态。"
+              },
+              {
+                "case_id": "KL_CAPTURE_007",
+                "description": "验证日志中记录的时间戳与实际输入时间的一致性。",
+                "expected_result": "时间戳准确反映按键发生的时间，误差在可接受范围内。"
+              },
+              {
+                "case_id": "KL_CAPTURE_008",
+                "description": "验证日志中是否捕获了相关的上下文信息（如活动窗口标题、进程名）。",
+                "expected_result": "日志中包含正确的活动窗口标题和/或进程名等上下文信息。"
+              },
+              {
+                "case_id": "KL_CAPTURE_009",
+                "description": "在受控主机上进行快速连续的键盘输入。",
+                "expected_result": "所有快速连续的按键事件都被准确捕获，无遗漏或乱序。"
+              }
+            ]
+          },
+          {
+            "suite_name": "日志管理与查看",
+            "suite_description": "验证键盘记录日志的存储、查看、过滤、导出和清除功能。",
+            "test_cases": [
+              {
+                "case_id": "KL_LOG_001",
+                "description": "打开日志查看界面，查看已记录的键盘日志列表。",
+                "expected_result": "日志列表正确显示所有已记录的键盘事件，内容清晰可读。"
+              },
+              {
+                "case_id": "KL_LOG_002",
+                "description": "随机选择几条日志，验证其内容与实际输入是否完全一致。",
+                "expected_result": "日志内容与实际输入完全一致，无错误或缺失。"
+              },
+              {
+                "case_id": "KL_LOG_003",
+                "description": "根据指定的时间范围（如今天、昨天、自定义日期）过滤日志。",
+                "expected_result": "日志列表只显示符合指定时间范围的记录。"
+              },
+              {
+                "case_id": "KL_LOG_004",
+                "description": "根据应用程序名称或窗口标题过滤日志。",
+                "expected_result": "日志列表只显示来自指定应用程序或窗口的记录。"
+              },
+              {
+                "case_id": "KL_LOG_005",
+                "description": "将日志导出到文件（如TXT, CSV格式）。",
+                "expected_result": "日志成功导出到指定文件，文件内容格式正确且完整。"
+              },
+              {
+                "case_id": "KL_LOG_006",
+                "description": "清除所有已记录的日志。",
+                "expected_result": "所有日志被成功清除，日志列表为空，且无法恢复。"
+              },
+              {
+                "case_id": "KL_LOG_007",
+                "description": "验证日志存储路径和文件大小限制（如果存在）。",
+                "expected_result": "日志文件存储在指定路径，且在达到预设大小限制时能正确处理（如循环覆盖或停止记录）。"
+              },
+              {
+                "case_id": "KL_LOG_008",
+                "description": "在日志量非常大时（如数万条记录），查看和操作日志的性能。",
+                "expected_result": "日志查看和过滤操作响应迅速，无明显卡顿或崩溃。"
+              }
+            ]
+          },
+          {
+            "suite_name": "性能与资源占用",
+            "suite_description": "评估键盘记录功能对受控主机系统性能和资源占用的影响。",
+            "test_cases": [
+              {
+                "case_id": "KL_PERF_001",
+                "description": "在启用键盘记录功能后，监控受控主机的CPU和内存占用情况。",
+                "expected_result": "键盘记录功能对CPU和内存的占用率较低，不影响系统正常运行。"
+              },
+              {
+                "case_id": "KL_PERF_002",
+                "description": "在受控主机进行大量键盘输入时，监控资源占用。",
+                "expected_result": "即使在大量输入时，资源占用也保持在合理水平，系统响应无明显延迟。"
+              },
+              {
+                "case_id": "KL_PERF_003",
+                "description": "监控日志文件写入对磁盘I/O的影响。",
+                "expected_result": "日志写入操作对磁盘I/O的影响微乎其微，不造成磁盘瓶颈。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常情况与鲁棒性",
+            "suite_description": "验证键盘记录功能在异常情况下的行为和鲁棒性。",
+            "test_cases": [
+              {
+                "case_id": "KL_ROBUST_001",
+                "description": "在受控主机重启后，验证记录功能是否能根据配置自动恢复。",
+                "expected_result": "如果配置为开机启动，则受控主机重启后键盘记录功能自动启用并继续记录。"
+              },
+              {
+                "case_id": "KL_ROBUST_002",
+                "description": "在受控主机磁盘空间不足时，验证日志记录行为。",
+                "expected_result": "当磁盘空间不足时，系统应有明确提示，并根据配置停止记录或删除旧日志以腾出空间。"
+              },
+              {
+                "case_id": "KL_ROBUST_003",
+                "description": "在网络连接不稳定或中断时，验证远程记录行为。",
+                "expected_result": "网络中断时，记录功能应能缓存日志或在恢复连接后自动上传，确保数据不丢失。"
+              },
+              {
+                "case_id": "KL_ROBUST_004",
+                "description": "验证对敏感信息（如密码输入框）的记录策略（如果存在）。",
+                "expected_result": "根据安全策略，密码输入框中的内容应被屏蔽、加密或不被记录。"
+              },
+              {
+                "case_id": "KL_ROBUST_005",
+                "description": "在受控主机上以不同用户权限（管理员/普通用户）登录并进行输入。",
+                "expected_result": "键盘记录功能在不同用户权限下均能正常工作，并能区分不同用户的输入（如果支持）。"
+              },
+              {
+                "case_id": "KL_ROBUST_006",
+                "description": "在受控主机上运行可能干扰键盘事件的程序（如游戏、全屏应用）。",
+                "expected_result": "键盘记录功能不受其他程序干扰，仍能准确捕获按键事件。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "主控端列表排序",
+        "image_url": null,
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "基本排序功能测试",
+            "suite_description": "验证主控端列表能够根据指定属性（窗口名称、服务类型、进程ID）进行正确的升序和降序排列。",
+            "test_cases": [
+              {
+                "case_id": "FM_SORT_001",
+                "description": "在主控端列表界面，点击“窗口名称”列头，进行升序排序。",
+                "expected_result": "列表项根据“窗口名称”属性按字母顺序（或数字顺序，如果名称包含数字）升序排列。"
+              },
+              {
+                "case_id": "FM_SORT_002",
+                "description": "在主控端列表界面，点击“窗口名称”列头两次（或点击一次后再次点击以切换为降序），进行降序排序。",
+                "expected_result": "列表项根据“窗口名称”属性按字母顺序（或数字顺序）降序排列。"
+              },
+              {
+                "case_id": "FM_SORT_003",
+                "description": "在主控端列表界面，点击“服务类型”列头，进行升序排序。",
+                "expected_result": "列表项根据“服务类型”属性按字母顺序升序排列。"
+              },
+              {
+                "case_id": "FM_SORT_004",
+                "description": "在主控端列表界面，点击“服务类型”列头两次，进行降序排序。",
+                "expected_result": "列表项根据“服务类型”属性按字母顺序降序排列。"
+              },
+              {
+                "case_id": "FM_SORT_005",
+                "description": "在主控端列表界面，点击“进程ID”列头，进行升序排序。",
+                "expected_result": "列表项根据“进程ID”属性按数字大小升序排列。"
+              },
+              {
+                "case_id": "FM_SORT_006",
+                "description": "在主控端列表界面，点击“进程ID”列头两次，进行降序排序。",
+                "expected_result": "列表项根据“进程ID”属性按数字大小降序排列。"
+              },
+              {
+                "case_id": "FM_SORT_007",
+                "description": "连续点击不同列头进行排序（例如：先按“服务类型”升序，再按“窗口名称”降序）。",
+                "expected_result": "列表最终根据最后一次点击的列（“窗口名称”）进行降序排列，之前的排序被覆盖。"
+              }
+            ]
+          },
+          {
+            "suite_name": "边界条件与异常测试",
+            "suite_description": "测试在特殊数据情况（如空列表、单项、混合数据、特殊字符等）下的排序行为。",
+            "test_cases": [
+              {
+                "case_id": "FM_SORT_008",
+                "description": "当主控端列表为空时，尝试点击任意列头进行排序。",
+                "expected_result": "列表保持为空，无错误提示，界面显示正常。"
+              },
+              {
+                "case_id": "FM_SORT_009",
+                "description": "当主控端列表中只有一项时，尝试点击任意列头进行排序。",
+                "expected_result": "列表项保持不变，无错误提示，界面显示正常。"
+              },
+              {
+                "case_id": "FM_SORT_010",
+                "description": "列表包含混合数据类型的“窗口名称”（如纯数字、纯字母、数字字母混合、特殊字符），进行升序/降序排序。",
+                "expected_result": "排序结果符合预期，混合数据类型能正确比较和排列。"
+              },
+              {
+                "case_id": "FM_SORT_011",
+                "description": "列表包含多个具有相同“窗口名称”、“服务类型”或“进程ID”的项，进行排序。",
+                "expected_result": "相同值的项相对顺序保持稳定（如果排序算法是稳定的），或按系统默认规则排列。"
+              },
+              {
+                "case_id": "FM_SORT_012",
+                "description": "“窗口名称”包含极长或极短字符串时，进行排序。",
+                "expected_result": "排序功能正常，长短字符串能正确比较。"
+              },
+              {
+                "case_id": "FM_SORT_013",
+                "description": "“窗口名称”包含特殊字符（如空格、标点符号、非ASCII字符）时，进行排序。",
+                "expected_result": "排序功能正常，特殊字符能正确比较和排列，符合字符集排序规则。"
+              }
+            ]
+          },
+          {
+            "suite_name": "排序稳定性与一致性测试",
+            "suite_description": "验证多次排序操作后，列表数据的完整性、排序结果的稳定性和一致性。",
+            "test_cases": [
+              {
+                "case_id": "FM_SORT_014",
+                "description": "对同一列（如“窗口名称”）反复进行升序和降序排序操作（例如：升序 -> 降序 -> 升序）。",
+                "expected_result": "每次排序结果都正确，且与前一次操作相反或恢复到初始状态。"
+              },
+              {
+                "case_id": "FM_SORT_015",
+                "description": "排序后，验证列表项的数据内容是否保持完整和正确，没有数据丢失或混淆。",
+                "expected_result": "列表项的各个属性值（如IP、端口等）与其所属的行保持一致，未发生错位。"
+              },
+              {
+                "case_id": "FM_SORT_016",
+                "description": "在列表数据发生刷新或更新（例如，有新的主控端连接或断开）后，尝试进行排序。",
+                "expected_result": "排序功能正常，新数据能被正确纳入排序范围，并按规则排列。"
+              }
+            ]
+          },
+          {
+            "suite_name": "用户体验与性能测试",
+            "suite_description": "评估排序操作的响应速度、视觉反馈以及在大数据量下的性能表现。",
+            "test_cases": [
+              {
+                "case_id": "FM_SORT_017",
+                "description": "点击列头进行排序时，观察是否有明显的视觉反馈（如列头指示排序方向的箭头）。",
+                "expected_result": "列头显示排序方向指示器（如向上/向下箭头），清晰指示当前排序状态。"
+              },
+              {
+                "case_id": "FM_SORT_018",
+                "description": "当主控端列表包含大量数据（例如1000+项）时，进行排序操作。",
+                "expected_result": "排序操作响应迅速，无明显卡顿或延迟，界面保持流畅。"
+              },
+              {
+                "case_id": "FM_SORT_019",
+                "description": "快速连续点击不同的列头进行排序。",
+                "expected_result": "系统能够及时响应并更新排序结果，不会出现崩溃或异常行为。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "test_outline_for_function": {
+        "function_name": "用户活动监控",
+        "image_url": "",
+        "main_ui_image_url": "./images/Yama.jpg",
+        "main_ui_description": "主界面以列表形式展示连接到本机的受控程序。选中某个主机以便进行远程控制。",
+        "test_suites": [
+          {
+            "suite_name": "功能入口与界面展示",
+            "suite_description": "验证用户活动监控功能的入口是否正确，以及初始界面是否能正常加载并显示。",
+            "test_cases": [
+              {
+                "case_id": "UAM_UI_001",
+                "description": "从主界面选中一个受控主机后，验证是否存在并能成功进入“用户活动监控”功能界面。",
+                "expected_result": "成功进入用户活动监控界面，界面布局清晰，无错误提示。"
+              },
+              {
+                "case_id": "UAM_UI_002",
+                "description": "在无任何活动记录的情况下，验证监控界面是否能正确显示“无活动记录”或类似提示。",
+                "expected_result": "界面显示友好的“无活动记录”提示，而非空白或错误。"
+              },
+              {
+                "case_id": "UAM_UI_003",
+                "description": "验证监控界面加载大量活动记录时，是否能正常显示并保持响应。",
+                "expected_result": "界面能够流畅加载并显示大量活动记录，滚动、切换等操作无明显卡顿。"
+              }
+            ]
+          },
+          {
+            "suite_name": "活动记录与数据准确性",
+            "suite_description": "验证系统是否能准确记录各种用户操作行为，并确保记录数据的完整性和准确性。",
+            "test_cases": [
+              {
+                "case_id": "UAM_LOG_001",
+                "description": "在受控主机上启动和关闭应用程序，验证监控日志是否准确记录应用程序的启动和关闭事件。",
+                "expected_result": "日志中包含应用程序的启动时间、关闭时间、程序名称、用户等信息，且与实际操作一致。"
+              },
+              {
+                "case_id": "UAM_LOG_002",
+                "description": "在受控主机上进行文件访问操作（打开、创建、修改、删除），验证监控日志是否准确记录文件访问事件。",
+                "expected_result": "日志中包含文件访问的时间、操作类型（打开/创建/修改/删除）、文件路径、文件名、用户等信息，且与实际操作一致。"
+              },
+              {
+                "case_id": "UAM_LOG_003",
+                "description": "在受控主机上进行键盘输入，验证监控日志是否能记录键盘输入内容，并对敏感信息（如密码）进行脱敏处理。",
+                "expected_result": "日志中包含键盘输入事件，输入内容被正确记录，敏感信息（如在密码框中的输入）被脱敏或不记录。"
+              },
+              {
+                "case_id": "UAM_LOG_004",
+                "description": "验证所有记录的活动日志的时间戳是否准确，与实际发生时间误差在可接受范围内。",
+                "expected_result": "日志时间戳与实际操作时间高度一致，误差不超过秒级。"
+              },
+              {
+                "case_id": "UAM_LOG_005",
+                "description": "验证日志中记录的用户、进程、应用程序等信息是否与受控主机的实际情况一致。",
+                "expected_result": "日志中的用户ID、进程ID、应用程序路径等信息准确无误。"
+              }
+            ]
+          },
+          {
+            "suite_name": "日志查询、筛选与展示",
+            "suite_description": "验证用户活动日志的查询、筛选、排序和实时更新功能是否正常工作。",
+            "test_cases": [
+              {
+                "case_id": "UAM_QUERY_001",
+                "description": "使用时间范围筛选功能，验证是否能正确显示指定时间段内的活动日志。",
+                "expected_result": "日志列表仅显示所选时间范围内的活动记录，无超出范围的记录。"
+              },
+              {
+                "case_id": "UAM_QUERY_002",
+                "description": "使用活动类型筛选功能（如“应用程序启动”、“文件访问”），验证是否能正确显示指定类型的活动日志。",
+                "expected_result": "日志列表仅显示所选活动类型的记录，无其他类型的记录。"
+              },
+              {
+                "case_id": "UAM_QUERY_003",
+                "description": "使用关键词搜索功能（如程序名、文件名、用户），验证是否能准确搜索并显示相关日志。",
+                "expected_result": "搜索结果准确匹配关键词，并高亮显示匹配项（如果支持）。"
+              },
+              {
+                "case_id": "UAM_QUERY_004",
+                "description": "验证日志列表的排序功能（如按时间升序/降序、按活动类型）是否正常工作。",
+                "expected_result": "日志列表按照所选的排序规则正确排列。"
+              },
+              {
+                "case_id": "UAM_QUERY_005",
+                "description": "在监控界面打开时，在受控主机上进行操作，验证日志列表是否能实时更新显示新的活动记录。",
+                "expected_result": "新的活动记录能够实时出现在日志列表顶部或指定位置。"
+              },
+              {
+                "case_id": "UAM_QUERY_006",
+                "description": "点击或双击某条日志记录，验证是否能弹出详细信息窗口，显示完整的活动详情。",
+                "expected_result": "弹出日志详情窗口，内容完整且易于理解。"
+              },
+              {
+                "case_id": "UAM_QUERY_007",
+                "description": "验证日志列表的分页或滚动加载功能是否正常，确保在大量数据下也能高效浏览。",
+                "expected_result": "分页或滚动加载功能正常，无数据丢失或重复，界面响应迅速。"
+              }
+            ]
+          },
+          {
+            "suite_name": "监控配置与管理",
+            "suite_description": "验证用户活动监控的启用、禁用、配置参数设置及日志存储管理功能。",
+            "test_cases": [
+              {
+                "case_id": "UAM_CONFIG_001",
+                "description": "验证管理员是否可以针对特定受控主机启用或禁用用户活动监控功能。",
+                "expected_result": "监控功能可以被独立地启用或禁用，且设置立即生效。"
+              },
+              {
+                "case_id": "UAM_CONFIG_002",
+                "description": "验证是否可以配置监控范围，例如只监控特定应用程序或特定文件路径的活动。",
+                "expected_result": "监控范围配置功能可用，且配置后仅记录指定范围内的活动。"
+              },
+              {
+                "case_id": "UAM_CONFIG_003",
+                "description": "验证是否可以设置日志的存储路径、最大存储空间或保留时长。",
+                "expected_result": "日志存储参数设置功能可用，且设置后日志按规定存储和清理。"
+              },
+              {
+                "case_id": "UAM_CONFIG_004",
+                "description": "验证日志导出功能，将指定时间段或筛选后的日志导出为可读格式（如CSV、TXT）。",
+                "expected_result": "日志能够成功导出，导出文件内容完整、格式正确。"
+              },
+              {
+                "case_id": "UAM_CONFIG_005",
+                "description": "验证日志清除功能，清除指定时间段或所有历史日志。",
+                "expected_result": "日志能够被成功清除，且清除后无法再查询到已清除的记录。"
+              }
+            ]
+          },
+          {
+            "suite_name": "异常行为识别与告警",
+            "suite_description": "验证系统是否能根据预设规则识别异常或未经授权的行为，并触发相应的告警。",
+            "test_cases": [
+              {
+                "case_id": "UAM_ALERT_001",
+                "description": "配置规则，当受控主机启动未经授权的应用程序时，验证系统是否能及时识别并记录为异常行为。",
+                "expected_result": "系统能够识别并记录未经授权的应用程序启动，并在日志中标记为异常。"
+              },
+              {
+                "case_id": "UAM_ALERT_002",
+                "description": "配置规则，当受控主机访问敏感文件时，验证系统是否能及时识别并记录为异常行为。",
+                "expected_result": "系统能够识别并记录敏感文件的异常访问，并在日志中标记为异常。"
+              },
+              {
+                "case_id": "UAM_ALERT_003",
+                "description": "验证当检测到异常行为时，系统是否能通过预设方式（如界面提示、邮件通知）发出告警。",
+                "expected_result": "系统能够按照配置的告警方式及时发出告警通知。"
+              },
+              {
+                "case_id": "UAM_ALERT_004",
+                "description": "验证所有触发的告警事件是否都被记录在独立的告警日志中，包含告警时间、类型、详情等。",
+                "expected_result": "告警事件被完整记录在告警日志中，信息准确。"
+              }
+            ]
+          },
+          {
+            "suite_name": "系统性能与资源占用",
+            "suite_description": "评估用户活动监控功能对系统性能和资源占用的影响。",
+            "test_cases": [
+              {
+                "case_id": "UAM_PERF_001",
+                "description": "在开启和关闭用户活动监控功能的情况下，对比受控主机的CPU和内存占用率。",
+                "expected_result": "开启监控后，CPU和内存占用率应在可接受范围内，不应导致系统明显变慢或卡顿。"
+              },
+              {
+                "case_id": "UAM_PERF_002",
+                "description": "在受控主机进行大量操作（如频繁文件读写、程序启动）时，验证监控功能是否能稳定运行，不导致系统崩溃或无响应。",
+                "expected_result": "监控功能在大量活动下仍能稳定运行，系统保持响应。"
+              },
+              {
+                "case_id": "UAM_PERF_003",
+                "description": "（如果涉及远程传输）验证在大量活动记录传输时，网络带宽占用是否合理，不影响其他网络应用。",
+                "expected_result": "网络带宽占用合理，不影响其他网络应用的正常使用。"
+              }
+            ]
+          },
+          {
+            "suite_name": "权限管理与安全性",
+            "suite_description": "验证不同权限级别的用户对监控功能的访问和操作限制，以及日志数据的安全性。",
+            "test_cases": [
+              {
+                "case_id": "UAM_SEC_001",
+                "description": "使用非管理员账户登录管理端，验证是否无法访问或操作用户活动监控功能。",
+                "expected_result": "非管理员账户无法访问或操作用户活动监控功能，或只能查看而不能修改配置。"
+              },
+              {
+                "case_id": "UAM_SEC_002",
+                "description": "验证日志数据在传输和存储过程中是否采取了加密或其他安全措施，防止未经授权的访问或篡改。",
+                "expected_result": "日志数据传输和存储符合安全规范，数据完整性和机密性得到保障。"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
