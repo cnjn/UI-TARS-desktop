@@ -230,7 +230,7 @@ export const startHttpApiServer = async (
     : Number.parseInt(process.env.UI_TARS_API_PORT || '10086', 10);
 
   await new Promise<void>((resolve) => {
-    server!.listen(listenPort, '127.0.0.1', () => resolve());
+    server!.listen(listenPort, '0.0.0.0', () => resolve());
   });
 
   const addr = server.address();

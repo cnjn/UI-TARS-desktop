@@ -2,7 +2,7 @@
 import os, time, requests
 
 PORT = int(os.environ.get("UI_TARS_API_PORT", "10086"))
-BASE = f"http://127.0.0.1:{PORT}"
+BASE = f"http://192.168.174.150:{PORT}"
 TOKEN = os.environ.get("UI_TARS_API_TOKEN")
 HEADERS = {"Authorization": f"Bearer {TOKEN}"} if TOKEN else {}
 
@@ -68,7 +68,7 @@ post("/agent/clear")
 #               }
 #             ]
 #           }"""})
-post("/agent/instructions", {"instructions":"""打开浏览器，搜索滑板鞋"""})
+post("/agent/instructions", {"instructions":"""打开浏览器，下载nodejs v22"""})
 # 3) 运行
 post("/agent/run")
 
